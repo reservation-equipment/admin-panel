@@ -1,12 +1,14 @@
-import React from 'react';
 import AuthForm from "./components/AuthForm/AuthForm.tsx";
 
+
 const Auth = () => {
+
     return (
-        <div>
+        <div className={"flex w-full h-screen items-center justify-center"}>
             <AuthForm/>
         </div>
     );
 };
+
 
 export default Auth;

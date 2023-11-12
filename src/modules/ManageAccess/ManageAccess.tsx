@@ -1,11 +1,11 @@
 import React from 'react';
 
-const SideMenu = () => {
+const ManageAccess = () => {
     return (
         <div>
-            
+
         </div>
     );
 };
 
-export default SideMenu;
+export default ManageAccess;
