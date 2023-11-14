@@ -8,6 +8,8 @@ import Dashboard from "./modules/Layout/Dashboard.tsx";
 import Equipments from "./modules/Equipments/Equipments.tsx";
 import ManageAccess from "./modules/ManageAccess/ManageAccess.tsx";
 import BookingHistory from "./modules/BookingHistory/BookingHistory.tsx";
+import {QueryClient, QueryClientProvider} from "react-query";
+import Departments from "./modules/Departments/Departments.tsx";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
                 element: <Equipments/>,
             },
             {
+                path: "departments",
+                element: <Departments/>,
+            },
+            {
                 path: "manageAccess",
                 element: <ManageAccess/>,
             },
@@ -40,8 +46,12 @@ const router = createBrowserRouter([
 
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RouterProvider router={router}/>
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router}/>
+        </QueryClientProvider>
     </React.StrictMode>,
 )

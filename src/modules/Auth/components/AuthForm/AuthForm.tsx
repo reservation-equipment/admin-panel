@@ -10,8 +10,7 @@ const AuthForm = () => {
     } = useForm();
     const navigate = useNavigate();
     const onSubmit = () => {
-        console.log('sdfsdf')
-        navigate(rootPath) // New line
+        navigate(rootPath)
 
     }
 

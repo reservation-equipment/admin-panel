@@ -1,9 +1,22 @@
-import {Button} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
+import CreateCard from "../CreateCard/CreateCard.tsx";
+
 
 const Panel = () => {
     return (
-        <div>
-            <Button variant={"outlined"}>{"Добавить оборудование"}</Button>
+        <div className={"w-1/2"}>
+            <Accordion>
+                <AccordionSummary
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Добавить оборудовани</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <CreateCard/>
+                </AccordionDetails>
+            </Accordion>
+            {/*<Button variant={"outlined"}>{"Добавить оборудование"}</Button>*/}
         </div>
     );
 };

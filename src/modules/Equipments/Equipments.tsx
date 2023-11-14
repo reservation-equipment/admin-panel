@@ -3,7 +3,7 @@ import CardEquipment from "./components/Card/Card.tsx";
 
 const Equipments = () => {
     return (
-        <div>
+        <div className="w-full">
             <Panel/>
             <CardEquipment/>
         </div>

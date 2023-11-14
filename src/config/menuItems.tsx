@@ -2,6 +2,7 @@ import ComputerIcon from '@mui/icons-material/Computer';
 import {ReactNode} from "react";
 import History from "@mui/icons-material/History";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 export type MenuItems = {
     label: string,
@@ -19,8 +20,8 @@ export const menuItems: MenuItems[] = [
     },
     {
         label: 'Структурное подразделение',
-        link: `${rootPath}/equipments`,
-        icon: <ComputerIcon/>
+        link: `${rootPath}/departments`,
+        icon: <AccountBalanceIcon/>
     },
     {
         label: "История бронирования",
