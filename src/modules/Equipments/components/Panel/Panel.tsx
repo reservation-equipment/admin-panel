@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import CreateCard from "../CreateCard/CreateCard.tsx";
 
 
@@ -9,6 +9,11 @@ const Panel = () => {
                 <AccordionSummary
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    className={"bg-cyan-950"}
+                    style={{
+                        backgroundColor: "#1976d2",
+                        color: "#fff"
+                    }}
                 >
                     <Typography>Добавить оборудование</Typography>
                 </AccordionSummary>
@@ -16,7 +21,6 @@ const Panel = () => {
                     <CreateCard/>
                 </AccordionDetails>
             </Accordion>
-            {/*<Button variant={"outlined"}>{"Добавить оборудование"}</Button>*/}
         </div>
     );
 };

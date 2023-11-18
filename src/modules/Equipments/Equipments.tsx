@@ -1,10 +1,9 @@
-import React, {useCallback, useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
 import {useQuery} from "react-query";
 import {baseUrl} from "../../config/api.ts";
-import {Box, Modal, Typography} from "@mui/material";
-import CreateCard from "./components/CreateCard/CreateCard.tsx";
+import {Box, Modal} from "@mui/material";
 import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
 
 const Equipments = () => {
@@ -15,7 +14,7 @@ const Equipments = () => {
         setOpen(true)
     }, [setIdSelected])
     const handleClose = () => setOpen(false);
-    const {data, loading} = useQuery({
+    const {data, isLoading} = useQuery({
         queryKey: ["equipments"], queryFn: () => fetch(`${baseUrl}/equipments`).then(res => res.json())
     })
 
@@ -23,10 +22,9 @@ const Equipments = () => {
         return data?.data?.map((equipment: any) => {
             return <CardEquipment openPopup={handleOpen} key={equipment.id} data={equipment}/>
         })
+    }, [data, handleOpen]);
 
-    }, [data]);
-
-    if(loading) return <p>Загрузка...</p>
+    if (isLoading) return <p>Загрузка...</p>
     return (
         <div className="w-full">
             <Modal
@@ -47,11 +45,12 @@ const Equipments = () => {
                     p: 4,
                     color: "black"
                 }}>
-                   <UpdateCard id={idSelected} close={handleClose}/>
+                    <UpdateCard id={idSelected} close={handleClose}/>
                 </Box>
             </Modal>
             <Panel/>
-            <div className={"grid  2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-flow-row gap-4"}>
+            <div
+                className={"grid  2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-flow-row gap-4"}>
                 {renderCard}
             </div>
         </div>

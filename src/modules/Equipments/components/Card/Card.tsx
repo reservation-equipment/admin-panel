@@ -9,7 +9,6 @@ const CardEquipment = ({data, openPopup}: any) => {
         return fetch(`${baseUrl}/equipment/${id}`, {
             method: "delete",
         })
-        // return axios.delete(`${baseUrl}/equipment/${id}`);
     }, {
         onSuccess: () => queryClient.invalidateQueries(['equipments'])
     });
@@ -20,7 +19,7 @@ const CardEquipment = ({data, openPopup}: any) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-        alignItems: "center"}}>
+        alignItems: "flex-start"}}>
             <CardMedia
                 component="img"
                 alt="green iguana"

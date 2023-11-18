@@ -1,5 +1,5 @@
-import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
-import {useForm} from "react-hook-form";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {Controller, useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useEffect, useMemo} from "react";
@@ -21,10 +21,12 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
         queryKey: ["equipmentsUpdate"],
         queryFn: () => fetch(`${baseUrl}/equipment/${id}`).then(res => res.json()),
     })
+
     const {
         register,
         handleSubmit,
         reset,
+        control
     } = useForm({
         defaultValues: oldData
     });
@@ -33,22 +35,24 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
         reset(oldData);
     }, [oldData]);
 
-    const mutation = useMutation(equipment => {
-        return fetch(`${baseUrl}/equipment`, {
-            method: "patch",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(equipment)
-        })
-    }, {
+    const {mutate} = useMutation(
+        async equipment => {
+            const res = await fetch(`${baseUrl}/equipment`, {
+                method: "PATCH",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(equipment)
+            });
+            return await res.json();
+        }, {
         onSuccess: () => queryClient.invalidateQueries(['equipments'])
     })
 
-    const handleUpdateEquipment = (data: any) => {
+    const handleUpdateEquipment = async (data: any) => {
         data.count = Number(data.count)
-        mutation.mutate(data)
+        mutate(data)
         close()
 
     }
@@ -58,6 +62,7 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
             return <MenuItem key={area.id} value={area.id}>{area.name}</MenuItem>
         })
     }, [data]);
+
     if (isLoading || oldIsLoading) return <p>Loading....</p>
     return (
         <form onSubmit={handleSubmit(handleUpdateEquipment)} className={"w-full flex flex-col gap-6 mt-8"}>
@@ -81,15 +86,24 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
                 id={"CreateForm_count"}
                 {...register("count")}
             />
-            <InputLabel id="areas_select">Помещение</InputLabel>
-            <Select
-                defaultValue={oldData?.area_id}
-                {...register("area_id")}
-                labelId={"areas_select"}
-                label={"Помещение"}
-                id={"CreateForm_areas"}>
-                {renderSelectItems}
-            </Select>
+            <FormControl fullWidth>
+                <InputLabel id="CreateForm_areas">Помещение</InputLabel>
+                <Controller
+                    render={({field}) => (
+                            <Select
+                                {...field}
+                                labelId={"areas_select"}
+                                label={"Помещение"}
+                                id={"CreateForm_areas"}>
+                                {renderSelectItems}
+                            </Select>
+                        )
+                    }
+                    name={"area_id"}
+                    control={control}
+                    defaultValue={oldData.area_id}
+                />
+            </FormControl>
             <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Обновить"}</Button>
         </form>
     );

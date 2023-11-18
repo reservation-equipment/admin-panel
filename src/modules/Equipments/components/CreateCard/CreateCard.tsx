@@ -2,14 +2,10 @@ import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
-import {useEffect, useMemo} from "react";
-
-type CreateCardProps = {
-    id: number
-}
+import {useMemo} from "react";
 
 
-const CreateCard = ({id}: CreateCardProps) => {
+const CreateCard = () => {
     const queryClient = useQueryClient();
 
     const {data, isLoading} = useQuery({
