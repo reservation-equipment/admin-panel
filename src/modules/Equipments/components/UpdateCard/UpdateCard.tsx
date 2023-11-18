@@ -4,12 +4,12 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useEffect, useMemo} from "react";
 
-type CreateCardProps = {
-    id: number
+type UpdateCardProps = {
+    id: number | null
+    close: () => void
 }
 
-
-const CreateCard = ({id}: CreateCardProps) => {
+const UpdateCard = ({id, close}: UpdateCardProps) => {
     const queryClient = useQueryClient();
 
     const {data, isLoading} = useQuery({
@@ -17,15 +17,25 @@ const CreateCard = ({id}: CreateCardProps) => {
         queryFn: () => fetch(`${baseUrl}/areas`,).then(response => response.json())
     })
 
+    const {data: oldData, isLoading: oldIsLoading} = useQuery({
+        queryKey: ["equipmentsUpdate"],
+        queryFn: () => fetch(`${baseUrl}/equipment/${id}`).then(res => res.json()),
+    })
     const {
         register,
         handleSubmit,
-    } = useForm();
+        reset,
+    } = useForm({
+        defaultValues: oldData
+    });
 
+    useEffect(() => {
+        reset(oldData);
+    }, [oldData]);
 
     const mutation = useMutation(equipment => {
         return fetch(`${baseUrl}/equipment`, {
-            method: "post",
+            method: "patch",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -36,9 +46,11 @@ const CreateCard = ({id}: CreateCardProps) => {
         onSuccess: () => queryClient.invalidateQueries(['equipments'])
     })
 
-    const handleCreateEquipment = (data: any) => {
+    const handleUpdateEquipment = (data: any) => {
         data.count = Number(data.count)
         mutation.mutate(data)
+        close()
+
     }
 
     const renderSelectItems = useMemo(() => {
@@ -46,9 +58,9 @@ const CreateCard = ({id}: CreateCardProps) => {
             return <MenuItem key={area.id} value={area.id}>{area.name}</MenuItem>
         })
     }, [data]);
-    if (isLoading) return <p>Loading....</p>
+    if (isLoading || oldIsLoading) return <p>Loading....</p>
     return (
-        <form onSubmit={handleSubmit(handleCreateEquipment)} className={"w-full flex flex-col gap-6 mt-8"}>
+        <form onSubmit={handleSubmit(handleUpdateEquipment)} className={"w-full flex flex-col gap-6 mt-8"}>
             <TextField type={"text"}
                        label="Название"
                        id={"CreateForm_name"}
@@ -71,15 +83,16 @@ const CreateCard = ({id}: CreateCardProps) => {
             />
             <InputLabel id="areas_select">Помещение</InputLabel>
             <Select
+                defaultValue={oldData?.area_id}
                 {...register("area_id")}
                 labelId={"areas_select"}
                 label={"Помещение"}
                 id={"CreateForm_areas"}>
                 {renderSelectItems}
             </Select>
-            <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Создать"}</Button>
+            <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Обновить"}</Button>
         </form>
     );
 };
 
-export default CreateCard;
+export default UpdateCard;

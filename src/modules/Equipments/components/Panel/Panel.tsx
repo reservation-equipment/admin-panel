@@ -4,13 +4,13 @@ import CreateCard from "../CreateCard/CreateCard.tsx";
 
 const Panel = () => {
     return (
-        <div className={"w-1/2"}>
+        <div className={"w-1/2 mb-10"}>
             <Accordion>
                 <AccordionSummary
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography>Добавить оборудовани</Typography>
+                    <Typography>Добавить оборудование</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <CreateCard/>
