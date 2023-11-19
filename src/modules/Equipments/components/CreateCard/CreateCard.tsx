@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useMemo} from "react";
+import {getAllAreas} from "../../../../config/routes/Areas.ts";
 
 
 const CreateCard = () => {
@@ -10,7 +11,7 @@ const CreateCard = () => {
 
     const {data, isLoading} = useQuery({
         queryKey: ["areas"],
-        queryFn: () => fetch(`${baseUrl}/areas`,).then(response => response.json())
+        queryFn: getAllAreas
     })
 
     const {

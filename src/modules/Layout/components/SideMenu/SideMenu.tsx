@@ -3,9 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Button} from "@mui/material";
 
 const SideMenu = () => {
-
     const navigate = useNavigate();
-
 
     const onLogout = () => {
         navigate("/")
@@ -15,7 +13,7 @@ const SideMenu = () => {
             const {link, label, icon} = item;
             return <li key={ix}>
                 <Link className={"text-sky-950 flex items-center"} to={link}>
-                    <p className={"hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-2xl p-4 hover:text-cyan-300 flex gap-x-4"}>
+                    <p className={"items-center hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-2xl p-4 hover:text-cyan-300 flex gap-x-4"}>
                         {icon}{label}
                     </p>
                 </Link>

@@ -1,0 +1,1 @@
+export const uiBaseColors = "#1976d2"

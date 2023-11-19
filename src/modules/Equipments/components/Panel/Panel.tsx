@@ -1,5 +1,6 @@
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import CreateCard from "../CreateCard/CreateCard.tsx";
+import {uiBaseColors} from "../../../../config/styles/baseColors.ts";
 
 
 const Panel = () => {
@@ -11,7 +12,7 @@ const Panel = () => {
                     id="panel1a-header"
                     className={"bg-cyan-950"}
                     style={{
-                        backgroundColor: "#1976d2",
+                        backgroundColor: uiBaseColors,
                         color: "#fff"
                     }}
                 >

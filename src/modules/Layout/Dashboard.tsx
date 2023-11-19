@@ -2,6 +2,7 @@ import SideMenu from "./components/SideMenu/SideMenu.tsx";
 import {Link, Outlet, useLocation} from "react-router-dom";
 import {Breadcrumbs} from "@mui/material";
 import {useMemo} from "react";
+import {menuItems} from "../../config/menuItems.tsx";
 
 const Dashboard = () => {
     const location = useLocation();
@@ -10,13 +11,12 @@ const Dashboard = () => {
     const renderBreadcrumbsList = useMemo(() => {
         return breadcrumbsList.map((route: string, ix: number) => {
             return {
-                label:  route,
+                label:  menuItems.find((item) => item.path === route)?.label,
                 link: breadcrumbsList.slice(0, ix + 1).join("/")
             }
         }).slice(1)
     }, [breadcrumbsList]);
 
-    // console.log(breadcrumbsList, location.pathname, renderBreadcrumbsList)
     return (
         <div className={"flex"}>
             <SideMenu/>
