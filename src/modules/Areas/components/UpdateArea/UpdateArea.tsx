@@ -17,7 +17,6 @@ const UpdateArea = ({id, close}: UpdateAreaProps) => {
         queryKey: ["areasUpdate"],
         queryFn: () => fetch(`${baseUrl}/area/${id}`).then(res => res.json()),
     })
-    // console.log(oldData?.data)
 
     const {
         register,

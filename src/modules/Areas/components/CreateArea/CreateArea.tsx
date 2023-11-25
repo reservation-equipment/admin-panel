@@ -1,10 +1,18 @@
-import {useMutation, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {useForm} from "react-hook-form";
 import {baseUrl} from "../../../../config/api.ts";
-import {Button, TextField} from "@mui/material";
+import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {useMemo} from "react";
+import {getAllInstitutes} from "../../../../config/routes/Departments.ts";
+import {InstitutesModel} from "../../../../shared/types/Departments.ts";
+
 
 const CreateArea = () => {
     const queryClient = useQueryClient();
+    const {data, isLoading} = useQuery({
+        queryKey: ["institutes"],
+        queryFn: getAllInstitutes
+    })
 
     const {
         register,
@@ -26,12 +34,20 @@ const CreateArea = () => {
     })
 
     const handleCreateArea = (data: any) => {
-        console.log(data)
         data.square = Number(data.square)
         mutation.mutate(data)
         reset()
     }
 
+    const renderSelectItems = useMemo(() => {
+        return  data?.data.map((institute: InstitutesModel) => {
+            return <MenuItem key={institute.id} value={institute.id}>{institute.name}</MenuItem>
+        })
+    }, [data]);
+
+    console.log(data?.data)
+
+    if(isLoading) return <p>IS LOADING</p>
 
     return (
         <form onSubmit={handleSubmit(handleCreateArea)} className={"w-1/4 flex flex-col gap-6 mt-8"}>
@@ -55,6 +71,14 @@ const CreateArea = () => {
                 id={"CreateForm_appointment"}
                 {...register("appointment")}
             />
+            <InputLabel id="institutes_select">Институт</InputLabel>
+            <Select
+                {...register("institutes_id")}
+                labelId={"institutes_select"}
+                label={"Институт"}
+                id={"CreateForm_institutes"}>
+                {renderSelectItems}
+            </Select>
             <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Создать"}</Button>
         </form>
     );

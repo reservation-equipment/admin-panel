@@ -67,6 +67,8 @@ const AreasTable = ({openPopup}: any) => {
         queryFn: getAllAreas
     })
 
+    console.log(data)
+
 
     const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -89,6 +91,11 @@ const AreasTable = ({openPopup}: any) => {
         {
             field: 'appointment',
             headerName: 'Назначение',
+            width: 230,
+        },
+        {
+            field: 'institute',
+            headerName: 'Институт',
             width: 230,
         },
         {
@@ -123,7 +130,7 @@ const AreasTable = ({openPopup}: any) => {
     return (
             <DataGrid
                 style={{
-                    width: "50%",
+                    width: "fit-content",
                     marginTop: 40,
                 }}
                 editMode="row"
