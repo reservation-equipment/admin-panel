@@ -11,6 +11,8 @@ import BookingHistory from "./modules/BookingHistory/BookingHistory.tsx";
 import {QueryClient, QueryClientProvider} from "react-query";
 import Departments from "./modules/Departments/Departments.tsx";
 import Areas from "./modules/Areas/Areas.tsx";
+import {AuthContextProvider} from "./context/AuthContext.tsx";
+import {PrivateRoute} from "./modules/ManageAccess/PrivateRoute.tsx";
 
 const router = createBrowserRouter([
     {
@@ -19,7 +21,10 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <Dashboard/>,
+
+        element: <PrivateRoute>
+            <Dashboard/>
+        </PrivateRoute>,
         children: [
             {
                 path: "main",
@@ -54,9 +59,11 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    // <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router}/>
-        </QueryClientProvider>
-    // </React.StrictMode>,
+    <React.StrictMode>
+        <AuthContextProvider>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router}/>
+            </QueryClientProvider>
+        </AuthContextProvider>
+     </React.StrictMode>,
 )

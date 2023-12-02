@@ -3,16 +3,15 @@ import {useForm} from "react-hook-form";
 import {baseUrl} from "../../../../config/api.ts";
 import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useMemo} from "react";
-import {getAllInstitutes} from "../../../../config/routes/Departments.ts";
 import {InstitutesModel} from "../../../../shared/types/Departments.ts";
+import DepartmentService from "../../../../services/DepartmentService.ts";
 
 
 const CreateArea = () => {
     const queryClient = useQueryClient();
-    const {data, isLoading} = useQuery({
-        queryKey: ["institutes"],
-        queryFn: getAllInstitutes
-    })
+    const {data, isLoading} = useQuery(
+        "institutes",
+        DepartmentService.getAllInstitutes)
 
     const {
         register,
@@ -40,14 +39,13 @@ const CreateArea = () => {
     }
 
     const renderSelectItems = useMemo(() => {
-        return  data?.data.map((institute: InstitutesModel) => {
+        return data?.data.map((institute: InstitutesModel) => {
             return <MenuItem key={institute.id} value={institute.id}>{institute.name}</MenuItem>
         })
     }, [data]);
 
-    console.log(data?.data)
 
-    if(isLoading) return <p>IS LOADING</p>
+    if (isLoading) return <p>IS LOADING</p>
 
     return (
         <form onSubmit={handleSubmit(handleCreateArea)} className={"w-1/4 flex flex-col gap-6 mt-8"}>

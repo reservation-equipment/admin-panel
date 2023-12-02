@@ -1,7 +1,7 @@
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import {Box} from "@mui/material";
 import {useQuery} from "react-query";
-import {getAllInfo} from "../../config/routes/Departments.ts";
+import {getAllInfo} from "../../api/Departments.ts";
 
 const columns: GridColDef[] = [
     {

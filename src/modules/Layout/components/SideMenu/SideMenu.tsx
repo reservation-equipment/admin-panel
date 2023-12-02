@@ -1,11 +1,20 @@
 import {menuItems} from "../../../../config/menuItems.tsx";
 import {Link, useNavigate} from "react-router-dom";
 import {Button} from "@mui/material";
+import AuthService from "../../../../services/AuthService.ts";
+import {useContext} from "react";
+import {AuthContext} from "../../../../context/AuthContext.tsx";
 
 const SideMenu = () => {
     const navigate = useNavigate();
+    const {dispatch} = useContext(AuthContext)
 
-    const onLogout = () => {
+    const onLogout = async () => {
+        await AuthService.logOut()
+        localStorage.removeItem("token")
+        dispatch({
+            type: "LOGOUT"
+        })
         navigate("/")
     }
 

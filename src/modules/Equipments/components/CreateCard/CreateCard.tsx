@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useMemo} from "react";
-import {getAllAreas} from "../../../../config/routes/Areas.ts";
+import {getAllAreas} from "../../../../api/Areas.ts";
 
 
 const CreateCard = () => {
