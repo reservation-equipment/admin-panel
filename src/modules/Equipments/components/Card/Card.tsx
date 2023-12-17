@@ -13,28 +13,37 @@ const CardEquipment = ({data, openPopup}: any) => {
         onSuccess: () => queryClient.invalidateQueries(['equipments'])
     });
 
-    
+
     return (
-        <Card sx={{ maxWidth: 345, minWidth: 250,
+        <Card sx={{
+            maxWidth: 345, minWidth: 250, height: 400,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-        alignItems: "flex-start"}}>
+            borderWidth: 2,
+            borderColor: "grey",
+            alignItems: "flex-start",
+            boxShadow: "4px 4px 39px 0px rgba(34, 60, 80, 0.2)"
+        }}>
             <CardMedia
                 component="img"
-                alt="green iguana"
+                // alt="green iguana"
                 height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
+                // image="/static/images/cards/contemplative-reptile.jpg"
+                style={{
+                    backgroundColor: "#d0d0d0",
+                    width: "100%",
+                    height: 100
+                }}
             />
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography variant="h6" style={{
+                    maxHeight: 200
+                }} component="div" className={"overflow-y-hidden"}>
                     {data.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {`Описание: ${data.description}`}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {`Количество: ${data.count}` }
+                    {`Количество: ${data.count}`}
                 </Typography>
             </CardContent>
             <CardActions>

@@ -7,10 +7,11 @@ import {Button, TextField} from "@mui/material";
 type UpdateAreaProps = {
     id: number | null
     close: () => void
+    setShowAlert: (value: boolean) => void
 }
 
 
-const UpdateArea = ({id, close}: UpdateAreaProps) => {
+const UpdateArea = ({id, close, setShowAlert}: UpdateAreaProps) => {
     const queryClient = useQueryClient();
 
     const {data: oldData, isLoading: oldIsLoading} = useQuery({
@@ -21,15 +22,18 @@ const UpdateArea = ({id, close}: UpdateAreaProps) => {
     const {
         register,
         handleSubmit,
-        reset,
+        setValue
     } = useForm({
         defaultValues: oldData?.data
     });
 
     useEffect(() => {
-        console.log(oldData?.data)
-        reset(oldData);
-    }, [oldData, reset]);
+        if(oldData) {
+            Object.keys(oldData.data).forEach((key) => {
+                setValue(key, oldData.data[key]);
+            });
+        }
+    }, [oldData]);
 
     const {mutate} = useMutation(
         async area => {
@@ -43,7 +47,10 @@ const UpdateArea = ({id, close}: UpdateAreaProps) => {
             });
             return await res.json();
         }, {
-            onSuccess: () => queryClient.invalidateQueries(['areas'])
+            onSuccess: () => {
+                setShowAlert(true)
+                queryClient.invalidateQueries(['areas'])
+            }
         })
 
     const handleUpdateEquipment = async (data: any) => {
@@ -51,6 +58,7 @@ const UpdateArea = ({id, close}: UpdateAreaProps) => {
         mutate(data)
         close()
     }
+
 
     if (oldIsLoading) return <p>Loading....</p>
     return (
@@ -71,6 +79,7 @@ const UpdateArea = ({id, close}: UpdateAreaProps) => {
             <TextField
                 type={"text"}
                 multiline={true}
+                rows={5}
                 label="Назначение"
                 id={"CreateForm_appointment"}
                 {...register("appointment")}

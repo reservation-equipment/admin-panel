@@ -20,7 +20,9 @@ const Dashboard = () => {
     return (
         <div className={"flex"}>
             <SideMenu/>
-            <div className={"w-full mt-8 ml-10"}>
+            <div className={"w-full mt-8"} style={{
+                marginLeft: 350,
+            }}>
                 <Breadcrumbs className={"w-auto pb-6"}>
                     {renderBreadcrumbsList.map((route: any, ix: number) => {
                         return <Link key={ix} color="inherit" to={route.link}>

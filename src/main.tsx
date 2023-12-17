@@ -13,6 +13,8 @@ import Departments from "./modules/Departments/Departments.tsx";
 import Areas from "./modules/Areas/Areas.tsx";
 import {AuthContextProvider} from "./context/AuthContext.tsx";
 import {PrivateRoute} from "./modules/ManageAccess/PrivateRoute.tsx";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const router = createBrowserRouter([
     {
@@ -62,8 +64,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <AuthContextProvider>
             <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router}/>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <RouterProvider router={router}/>
+                </LocalizationProvider>
             </QueryClientProvider>
         </AuthContextProvider>
-     </React.StrictMode>,
+    </React.StrictMode>,
 )

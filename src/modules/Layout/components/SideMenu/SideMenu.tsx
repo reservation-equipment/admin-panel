@@ -30,7 +30,7 @@ const SideMenu = () => {
         })
 
     return (
-        <div className={"w-fit h-screen bg-gray-600 px-5 py-8 flex flex-col justify-between"}>
+        <div className={"w-350 h-screen bg-gray-600 px-5 py-8 flex flex-col justify-between fixed z-10"}>
             <ul className={"flex flex-col gap-y-5"}>
                 {renderMenuItems}
             </ul>

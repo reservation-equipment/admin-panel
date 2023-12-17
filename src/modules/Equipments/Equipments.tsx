@@ -5,8 +5,13 @@ import {useQuery} from "react-query";
 import {baseUrl} from "../../config/api.ts";
 import {Box, Modal} from "@mui/material";
 import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
+import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
+import {useDebounce} from "../../hooks/useDebounce.ts";
 
 const Equipments = () => {
+    const [searchName, setSearchName] = useState("")
+    const debouncedValue = useDebounce(searchName, 700)
+
     const [open, setOpen] = useState(false);
     const [idSelected, setIdSelected] = useState<number | null>(null)
     const handleOpen = useCallback((id: number) => {
@@ -14,9 +19,18 @@ const Equipments = () => {
         setOpen(true)
     }, [setIdSelected])
     const handleClose = () => setOpen(false);
+
     const {data, isLoading} = useQuery({
-        queryKey: ["equipments"], queryFn: () => fetch(`${baseUrl}/equipments`).then(res => res.json())
+        queryKey: ["equipments", debouncedValue], queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}`).then(res => res.json())
     })
+
+    const handleSearchName = useCallback(
+        (value: string) => {
+            setSearchName(value)
+        },
+        [setSearchName],
+    );
+
 
     const renderCard = useMemo(() => {
         return data?.data?.map((equipment: any) => {
@@ -49,8 +63,17 @@ const Equipments = () => {
                 </Box>
             </Modal>
             <Panel/>
+            <InputSearch searchValue={searchName} setSearchValue={handleSearchName}/>
             <div
-                className={"grid  2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-flow-row gap-4"}>
+                className={`
+                grid 
+                2xl:grid-cols-5 
+                xl:grid-cols-4 
+                lg:grid-cols-3 
+                md:grid-cols-2 
+                sm:grid-cols-1 
+                grid-flow-row 
+                gap-y-10`}>
                 {renderCard}
             </div>
         </div>

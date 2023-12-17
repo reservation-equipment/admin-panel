@@ -89,12 +89,12 @@ const AreasTable = ({openPopup}: any) => {
         {
             field: 'appointment',
             headerName: 'Назначение',
-            width: 230,
+            width: 650,
         },
         {
             field: 'institute',
             headerName: 'Институт',
-            width: 230,
+            width: 650,
         },
         {
             field: 'actions',
@@ -129,6 +129,7 @@ const AreasTable = ({openPopup}: any) => {
             <DataGrid
                 style={{
                     width: "fit-content",
+                    height: "fit-content",
                     marginTop: 40,
                 }}
                 editMode="row"
@@ -139,7 +140,8 @@ const AreasTable = ({openPopup}: any) => {
                         paginationModel: {page: 0, pageSize: 5},
                     },
                 }}
-                pageSizeOptions={[5, 10]}
+                pageSizeOptions={[5, 10, 15]}
+
                 checkboxSelection
                 rowModesModel={rowModesModel}
                 onRowEditStop={handleRowEditStop}

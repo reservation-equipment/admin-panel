@@ -55,6 +55,7 @@ const CreateCard = () => {
             <TextField
                 label="Описание"
                 multiline={true}
+                rows={4}
                 type={"text"}
                 id={"CreateForm_description"}
                 {...register("description")}
