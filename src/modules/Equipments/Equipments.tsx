@@ -3,7 +3,7 @@ import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
 import {useQuery} from "react-query";
 import {baseUrl} from "../../config/api.ts";
-import {Box, Modal} from "@mui/material";
+import {Box, Modal, Pagination} from "@mui/material";
 import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
 import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
 import {useDebounce} from "../../hooks/useDebounce.ts";
@@ -21,8 +21,10 @@ const Equipments = () => {
     const handleClose = () => setOpen(false);
 
     const {data, isLoading} = useQuery({
-        queryKey: ["equipments", debouncedValue], queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}`).then(res => res.json())
+        queryKey: ["equipments", debouncedValue], queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}&skip=0&take=15`).then(res => res.json())
     })
+
+    console.log(data.count._count)
 
     const handleSearchName = useCallback(
         (value: string) => {
@@ -63,7 +65,11 @@ const Equipments = () => {
                 </Box>
             </Modal>
             <Panel/>
-            <InputSearch searchValue={searchName} setSearchValue={handleSearchName}/>
+            <Box className={"flex items-center justify-between"}>
+
+                <InputSearch searchValue={searchName} setSearchValue={handleSearchName}/>
+                <Pagination count={Math.round(data?.count._count / 15)} />
+            </Box>
             <div
                 className={`
                 grid 
@@ -73,7 +79,8 @@ const Equipments = () => {
                 md:grid-cols-2 
                 sm:grid-cols-1 
                 grid-flow-row 
-                gap-y-10`}>
+                gap-y-10
+                gap-x-4`}>
                 {renderCard}
             </div>
         </div>

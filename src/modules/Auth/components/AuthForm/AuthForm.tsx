@@ -14,7 +14,12 @@ const AuthForm = () => {
     const {
         register,
         handleSubmit,
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    });
     const [showAlert, setShowAlert] = useState(false)
     const navigate = useNavigate();
     const {dispatch, state} = useContext(AuthContext)

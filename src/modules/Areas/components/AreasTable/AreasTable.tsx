@@ -25,10 +25,6 @@ interface EditToolbarProps {
     ) => void;
 }
 
-type AreasTableProps = {
-    openPopup: (id: number) => void
-}
-
 function EditToolbar(props: EditToolbarProps) {
     const {  setRowModesModel } = props;
 

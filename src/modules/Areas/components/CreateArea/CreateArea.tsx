@@ -6,10 +6,16 @@ import {useMemo} from "react";
 import {InstitutesModel} from "../../../../shared/types/Departments.ts";
 import DepartmentService from "../../../../services/DepartmentService.ts";
 
+type ResponseAllInstitutes = {
+    data: {
+        data: InstitutesModel[]
+    } | undefined,
+    isLoading: boolean
+}
 
 const CreateArea = () => {
     const queryClient = useQueryClient();
-    const {data, isLoading} = useQuery(
+    const {data, isLoading}: ResponseAllInstitutes = useQuery(
         "institutes",
         DepartmentService.getAllInstitutes)
 

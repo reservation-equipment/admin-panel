@@ -3,7 +3,7 @@ import $api from "../api/axios.ts";
 
 export default class DepartmentService {
     static async getAllInstitutes(): Promise<InstitutesModel[]> {
-        return $api.get<InstitutesModel[]>("/departments")
+        return $api.get("/departments")
             .then(res => res.data)
     }
 }

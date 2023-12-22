@@ -30,7 +30,10 @@ const Dashboard = () => {
                         </Link>
                     })}
                 </Breadcrumbs>
-                <Outlet/>
+                <div className={"container"}>
+
+                    <Outlet/>
+                </div>
             </div>
         </div>
     );

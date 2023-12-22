@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ManageAccess = () => {
     return (
         <div>
