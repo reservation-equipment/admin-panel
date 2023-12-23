@@ -66,7 +66,7 @@ const Equipments = () => {
 
     if (isLoading) return <p>Загрузка...</p>
     return (
-        <div className="w-full">
+        <div className="w-full pb-10">
             <Modal
                 open={open}
                 onClose={handleClose}

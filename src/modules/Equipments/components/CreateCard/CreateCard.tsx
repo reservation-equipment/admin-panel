@@ -17,6 +17,8 @@ const CreateCard = () => {
 
     const {
         register,
+        unregister,
+        setValue,
         handleSubmit,
     } = useForm();
 
@@ -35,8 +37,9 @@ const CreateCard = () => {
     })
 
     const handleCreateEquipment = (data: any) => {
+        console.log(data)
         data.count = Number(data.count)
-        mutation.mutate(data)
+        // mutation.mutate(data)
     }
 
     const renderSelectItems = useMemo(() => {
@@ -76,7 +79,12 @@ const CreateCard = () => {
                 id={"CreateForm_areas"}>
                 {renderSelectItems}
             </Select>
-            <DropzoneFiles/>
+            <DropzoneFiles {...{
+                name: "image_equipment",
+                register,
+                unregister,
+                setValue,
+            }}/>
             <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Создать"}</Button>
         </form>
     );
