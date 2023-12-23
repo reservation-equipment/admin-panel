@@ -56,7 +56,9 @@ const router = createBrowserRouter([
 
     },
 
-]);
+], {
+
+});
 
 const queryClient = new QueryClient();
 
@@ -65,7 +67,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <AuthContextProvider>
             <QueryClientProvider client={queryClient}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <RouterProvider router={router}/>
+                        <RouterProvider router={router}/>
                 </LocalizationProvider>
             </QueryClientProvider>
         </AuthContextProvider>

@@ -136,7 +136,7 @@ const AreasTable = ({openPopup}: any) => {
                         paginationModel: {page: 0, pageSize: 5},
                     },
                 }}
-                pageSizeOptions={[5, 10, 15]}
+                pageSizeOptions={[5, 10, 15, 30]}
 
                 checkboxSelection
                 rowModesModel={rowModesModel}

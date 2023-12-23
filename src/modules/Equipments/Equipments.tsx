@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
 import {useQuery} from "react-query";
@@ -7,10 +7,39 @@ import {Box, Modal, Pagination} from "@mui/material";
 import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
 import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
 import {useDebounce} from "../../hooks/useDebounce.ts";
+import {usePagination} from "../../hooks/usePagination.ts";
 
 const Equipments = () => {
     const [searchName, setSearchName] = useState("")
+
     const debouncedValue = useDebounce(searchName, 700)
+
+    const [page,
+        setPage,
+        take,
+        countPage,
+        setCountPage,
+        handlePagination] = usePagination(1, 15)
+
+    const {data, isLoading} = useQuery({
+        queryKey: ["equipments", debouncedValue, page, take],
+        queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}&skip=${(page-1)*take}&take=${take}`).then(res => res.json())
+    })
+
+    useEffect(() => {
+        setPage(1)
+    }, []);
+
+
+    useEffect(() => {
+        const countAll = data?.count?._count;
+        if(countAll >= take) {
+            setCountPage(Math.round(countAll / take))
+        } else {
+            setCountPage(1)
+        }
+
+    }, [debouncedValue, take, setCountPage, data]);
 
     const [open, setOpen] = useState(false);
     const [idSelected, setIdSelected] = useState<number | null>(null)
@@ -20,11 +49,6 @@ const Equipments = () => {
     }, [setIdSelected])
     const handleClose = () => setOpen(false);
 
-    const {data, isLoading} = useQuery({
-        queryKey: ["equipments", debouncedValue], queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}&skip=0&take=15`).then(res => res.json())
-    })
-
-    console.log(data.count._count)
 
     const handleSearchName = useCallback(
         (value: string) => {
@@ -66,9 +90,13 @@ const Equipments = () => {
             </Modal>
             <Panel/>
             <Box className={"flex items-center justify-between"}>
-
                 <InputSearch searchValue={searchName} setSearchValue={handleSearchName}/>
-                <Pagination count={Math.round(data?.count._count / 15)} />
+                <Pagination page={page}
+                            count={countPage}
+                            color="primary"
+                            onChange={handlePagination}
+
+                />
             </Box>
             <div
                 className={`

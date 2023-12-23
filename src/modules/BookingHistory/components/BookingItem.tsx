@@ -8,7 +8,6 @@ interface BookingInfo {
 
 
 const BookingItem = ({data}: BookingInfo) => {
-    console.log(data)
     const {
         date_from, date_to, equipments: {
             name,
@@ -31,8 +30,8 @@ const BookingItem = ({data}: BookingInfo) => {
                     gap: "0 10px",
                     width: "100%"
                 }}>
-                    <div>{(new Date(date_from)).toLocaleDateString() + " / "}</div>
-                    <div>{(new Date(date_to)).toLocaleDateString()}</div>
+                    <div>{(new Date(date_from)).toLocaleString() + " / "}</div>
+                    <div>{(new Date(date_to)).toLocaleString()}</div>
                     <div style={{
                         marginLeft: 40,
                         fontWeight: 700
