@@ -4,6 +4,7 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useMemo} from "react";
 import {getAllAreas} from "../../../../api/Areas.ts";
+import DropzoneFiles from "../../../../shared/components/dropfiles/DropzoneFiles.tsx";
 
 
 const CreateCard = () => {
@@ -39,7 +40,7 @@ const CreateCard = () => {
     }
 
     const renderSelectItems = useMemo(() => {
-        return  data?.data.map((area: any) => {
+        return data?.data.map((area: any) => {
             return <MenuItem key={area.id} value={area.id}>{area.name}</MenuItem>
         })
     }, [data]);
@@ -75,6 +76,7 @@ const CreateCard = () => {
                 id={"CreateForm_areas"}>
                 {renderSelectItems}
             </Select>
+            <DropzoneFiles/>
             <Button variant={"contained"} className={"w-fit"} type={"submit"}>{"Создать"}</Button>
         </form>
     );
