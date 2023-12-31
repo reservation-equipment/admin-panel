@@ -74,7 +74,7 @@ const DropzoneFiles = (props: any) => {
         onDrop,
         accept: {'image/*': []},
         maxSize: 1024 * 1000,
-        maxFiles: 1
+        maxFiles: 2
     });
 
     const style = useMemo(() => ({

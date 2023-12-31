@@ -5,10 +5,12 @@ import {baseUrl} from "../../../../config/api.ts";
 import {useMemo} from "react";
 import {getAllAreas} from "../../../../api/Areas.ts";
 import DropzoneFiles from "../../../../shared/components/dropfiles/DropzoneFiles.tsx";
+import {useUploadImages} from "../../../../hooks/useUploadImages.ts";
 
 
 const CreateCard = () => {
     const queryClient = useQueryClient();
+    const uploadFiles = useUploadImages()
 
     const {data, isLoading} = useQuery({
         queryKey: ["areas"],
@@ -36,10 +38,13 @@ const CreateCard = () => {
         onSuccess: () => queryClient.invalidateQueries(['equipments'])
     })
 
-    const handleCreateEquipment = (data: any) => {
-        console.log(data)
+    const handleCreateEquipment = async (data: any) => {
         data.count = Number(data.count)
-        // mutation.mutate(data)
+        mutation.mutate(data);
+        if(mutation.isSuccess) {
+            const newEquipment = await mutation.data.json();
+            await uploadFiles(data.image_equipment, newEquipment.id);
+        }
     }
 
     const renderSelectItems = useMemo(() => {
