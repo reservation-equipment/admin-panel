@@ -1,7 +1,6 @@
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import {Box} from "@mui/material";
-import {useQuery} from "react-query";
-import {getAllInfo} from "../../api/Departments.ts";
+import {useDepartmentInfo} from "../../hooks/useDepartmentInfo.ts";
 
 const columns: GridColDef[] = [
     {
@@ -35,18 +34,17 @@ const columns: GridColDef[] = [
 
 
 const Departments = () => {
-    const {data: rows, isLoading} = useQuery({
-        queryKey: ["infoTables"],
-        queryFn: getAllInfo
-    })
-    if(isLoading)return <p>is loading</p>
+    const {data, isLoading} = useDepartmentInfo()
+
+    if(isLoading)return <p>loading...</p>
+
     return (
         <Box sx={{
             height: "auto",
             width: "fit-content"
         }}>
             <DataGrid
-                rows={rows.data}
+                rows={data ?? []}
                 columns={columns}
                 initialState={{
                     pagination: {

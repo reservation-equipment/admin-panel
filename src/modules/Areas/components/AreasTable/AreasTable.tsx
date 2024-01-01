@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import {
     DataGrid,
     GridActionsCellItem,
@@ -17,7 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {randomId} from "@mui/x-data-grid-generator";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {getAllAreas} from "../../../../api/Areas.ts";
+import {useGetAreas} from "../../../../hooks/useGetAreas.ts";
 
 interface EditToolbarProps {
     setRowModesModel: (
@@ -58,11 +58,7 @@ const AreasTable = ({openPopup}: any) => {
         onSuccess: () => queryClient.invalidateQueries(['areas'])
     });
 
-    const {data, isLoading} = useQuery({
-        queryKey: ["areas"],
-        queryFn: getAllAreas
-    })
-    
+    const {data, isLoading} = useGetAreas()
 
     const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -129,7 +125,7 @@ const AreasTable = ({openPopup}: any) => {
                     marginTop: 40,
                 }}
                 editMode="row"
-                rows={data?.data}
+                rows={data}
                 columns={columns}
                 initialState={{
                     pagination: {

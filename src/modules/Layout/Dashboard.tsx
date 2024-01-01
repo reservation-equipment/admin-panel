@@ -10,9 +10,17 @@ const Dashboard = () => {
 
     const renderBreadcrumbsList = useMemo(() => {
         return breadcrumbsList.map((route: string, ix: number) => {
-            return {
-                label:  menuItems.find((item) => item.path === route)?.label,
-                link: breadcrumbsList.slice(0, ix + 1).join("/")
+            console.log()
+            if (route.match(/^\d+$/)) {
+                return {
+                    label: route,
+                    link: `/dashboard/equipments/${route}`
+                }
+            } else {
+                return {
+                    label: menuItems.find((item) => item.path === route)?.label,
+                    link: breadcrumbsList.slice(0, ix + 1).join("/")
+                }
             }
         }).slice(1)
     }, [breadcrumbsList]);
@@ -24,14 +32,20 @@ const Dashboard = () => {
                 marginLeft: 350,
             }}>
                 <Breadcrumbs className={"w-auto pb-6"}>
-                    {renderBreadcrumbsList.map((route: any, ix: number) => {
-                        return <Link key={ix} color="inherit" to={route.link}>
-                            {route.label}
-                        </Link>
+                    {renderBreadcrumbsList.map((route: any, ix: number, arr: any) => {
+                        if (arr.length - 1 == ix) {
+                            return <p key={ix}>
+                                {route.label}
+                            </p>
+                        } else {
+                            return <Link key={ix} color="inherit" to={route.link}>
+                                {route.label}
+                            </Link>
+                        }
+
                     })}
                 </Breadcrumbs>
                 <div className={"container"}>
-
                     <Outlet/>
                 </div>
             </div>

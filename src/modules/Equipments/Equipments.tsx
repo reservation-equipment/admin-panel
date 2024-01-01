@@ -1,15 +1,17 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
-import {useQuery} from "react-query";
-import {baseUrl} from "../../config/api.ts";
-import {Box, Modal, Pagination} from "@mui/material";
+import {Alert, Box, Fade, Modal, Pagination} from "@mui/material";
 import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
 import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
 import {useDebounce} from "../../hooks/useDebounce.ts";
 import {usePagination} from "../../hooks/usePagination.ts";
+import {useGetEquipments} from "../../hooks/useGetEquipments.ts";
+import {Equipment} from "../../shared/types/Equipments.ts";
+import {useShowAlert} from "../../hooks/useShowAlert.ts";
 
 const Equipments = () => {
+    const [showDeleteAlert, setShowDeleteAlert] = useShowAlert()
     const [searchName, setSearchName] = useState("")
 
     const debouncedValue = useDebounce(searchName, 700)
@@ -21,9 +23,10 @@ const Equipments = () => {
         setCountPage,
         handlePagination] = usePagination(1, 15)
 
-    const {data, isLoading} = useQuery({
-        queryKey: ["equipments", debouncedValue, page, take],
-        queryFn: () => fetch(`${baseUrl}/equipments?name=${debouncedValue}&skip=${(page-1)*take}&take=${take}`).then(res => res.json())
+    const {data, isLoading} = useGetEquipments({
+        debouncedValue,
+        take,
+        page
     })
 
     useEffect(() => {
@@ -32,7 +35,7 @@ const Equipments = () => {
 
 
     useEffect(() => {
-        const countAll = data?.count?._count;
+        const countAll = data?.count?._count ?? 0;
         if(countAll >= take) {
             setCountPage(Math.round(countAll / take))
         } else {
@@ -43,6 +46,7 @@ const Equipments = () => {
 
     const [open, setOpen] = useState(false);
     const [idSelected, setIdSelected] = useState<number | null>(null)
+
     const handleOpen = useCallback((id: number) => {
         setIdSelected(id)
         setOpen(true)
@@ -57,12 +61,17 @@ const Equipments = () => {
         [setSearchName],
     );
 
-
     const renderCard = useMemo(() => {
-        return data?.data?.map((equipment: any) => {
-            return <CardEquipment openPopup={handleOpen} key={equipment.id} data={equipment}/>
-        })
-    }, [data, handleOpen]);
+        const equipmentsData = data?.data ?? []
+        if(!isLoading) {
+            return equipmentsData?.map((equipment: Equipment) => {
+                return <CardEquipment openPopup={handleOpen}
+                                      key={equipment?.id}
+                                      data={equipment}
+                                      setShowDeleteAlert={setShowDeleteAlert}/>
+            })
+        }
+    }, [data, handleOpen, isLoading]);
 
     if (isLoading) return <p>Загрузка...</p>
     return (
@@ -111,6 +120,16 @@ const Equipments = () => {
                 gap-x-4`}>
                 {renderCard}
             </div>
+            {showDeleteAlert && <Fade in={showDeleteAlert}>
+                <Alert variant={"outlined"} style={{
+                    width: 400,
+                    position: 'fixed',
+                    right: 50,
+                    top: 50
+                }} severity="success">
+                    Оборудование успешно удалено
+                </Alert>
+            </Fade>}
         </div>
     );
 };

@@ -15,6 +15,7 @@ import {AuthContextProvider} from "./context/AuthContext.tsx";
 import {PrivateRoute} from "./modules/ManageAccess/PrivateRoute.tsx";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import Equipment from "./modules/EquipmentPage/Equipment.tsx";
 
 const router = createBrowserRouter([
     {
@@ -23,17 +24,20 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-
         element: <PrivateRoute>
             <Dashboard/>
         </PrivateRoute>,
         children: [
             {
+                path: "equipments/:id",
+                element: <Equipment/>
+            },
+            {
                 path: "main",
                 element: <MainPage/>
             },
             {
-                path: "equipments",
+                path: "equipments/",
                 element: <Equipments/>,
             },
             {

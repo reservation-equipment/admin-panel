@@ -1,3 +1,5 @@
 import {baseUrl} from "../config/api.ts";
+import $api from "./axios.ts";
 
-export const getAllAreas = () => fetch(`${baseUrl}/areas`).then(response => response.json())
+export const getAllAreas = () => $api.get(`${baseUrl}/areas`)
+    .then(response => response?.data?.data)

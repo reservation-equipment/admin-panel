@@ -27,7 +27,9 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
         register,
         handleSubmit,
         reset,
-        control
+        control,
+        unregister,
+        setValue,
     } = useForm({
         defaultValues: oldData
     });

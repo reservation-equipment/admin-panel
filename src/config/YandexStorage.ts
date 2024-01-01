@@ -1,0 +1,1 @@
+export const YANDEX_URL_S3_IMAGE = "https://storage.yandexcloud.net/reeq-files/images"

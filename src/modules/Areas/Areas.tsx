@@ -1,14 +1,13 @@
 import AreasTable from "./components/AreasTable/AreasTable.tsx";
 import CreateArea from "./components/CreateArea/CreateArea.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Alert, Box, Fade, Modal} from "@mui/material";
 import UpdateArea from "./components/UpdateArea/UpdateArea.tsx";
-
-const TIMER_FADE_ALERT = 3000
+import {useShowAlert} from "../../hooks/useShowAlert.ts";
 
 
 const Areas = () => {
-    const [showAlert, setShowAlert] = useState(false)
+    const [showAlert, setShowAlert] = useShowAlert()
     const [openUpdatePopup, setOpenUpdatePopup] = useState(false)
     const [idSelected, setIdSelected] = useState<number | null>(null)
     const handleClose = () => setOpenUpdatePopup(false);
@@ -17,19 +16,6 @@ const Areas = () => {
         setIdSelected(id)
         setOpenUpdatePopup(true)
     }
-
-    useEffect(() => {
-
-            const timeout = setTimeout(() => {
-                setShowAlert(false);
-            }, TIMER_FADE_ALERT);
-
-            return () => {
-                clearTimeout(timeout);
-            }
-
-    }, [showAlert])
-
 
     return (
         <>

@@ -1,23 +1,14 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import {useForm} from "react-hook-form";
 import {baseUrl} from "../../../../config/api.ts";
 import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useMemo} from "react";
 import {InstitutesModel} from "../../../../shared/types/Departments.ts";
-import DepartmentService from "../../../../services/DepartmentService.ts";
-
-type ResponseAllInstitutes = {
-    data: {
-        data: InstitutesModel[]
-    } | undefined,
-    isLoading: boolean
-}
+import {useInstitutes} from "../../../../hooks/useInstitutes.ts";
 
 const CreateArea = () => {
     const queryClient = useQueryClient();
-    const {data, isLoading}: ResponseAllInstitutes = useQuery(
-        "institutes",
-        DepartmentService.getAllInstitutes)
+    const {data, isLoading} = useInstitutes()
 
     const {
         register,
@@ -45,7 +36,7 @@ const CreateArea = () => {
     }
 
     const renderSelectItems = useMemo(() => {
-        return data?.data.map((institute: InstitutesModel) => {
+        return data?.map((institute: InstitutesModel) => {
             return <MenuItem key={institute.id} value={institute.id}>{institute.name}</MenuItem>
         })
     }, [data]);
@@ -77,6 +68,7 @@ const CreateArea = () => {
             />
             <InputLabel id="institutes_select">Институт</InputLabel>
             <Select
+                defaultValue={data?.[0]?.id}
                 {...register("institutes_id")}
                 labelId={"institutes_select"}
                 label={"Институт"}
