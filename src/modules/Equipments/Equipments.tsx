@@ -1,14 +1,14 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
-import {Alert, Box, Fade, Modal, Pagination} from "@mui/material";
-import UpdateCard from "./components/UpdateCard/UpdateCard.tsx";
+import {Alert, Box, Fade, Pagination} from "@mui/material";
 import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
 import {useDebounce} from "../../hooks/useDebounce.ts";
 import {usePagination} from "../../hooks/usePagination.ts";
 import {useGetEquipments} from "../../hooks/useGetEquipments.ts";
 import {Equipment} from "../../shared/types/Equipments.ts";
 import {useShowAlert} from "../../hooks/useShowAlert.ts";
+import {ModalTypes, useModal} from "../../hooks/useModal.tsx";
 
 const Equipments = () => {
     const [showDeleteAlert, setShowDeleteAlert] = useShowAlert()
@@ -23,7 +23,7 @@ const Equipments = () => {
         setCountPage,
         handlePagination] = usePagination(1, 15)
 
-    const {data, isLoading} = useGetEquipments({
+    const {data, isLoading, isSuccess} = useGetEquipments({
         debouncedValue,
         take,
         page
@@ -36,7 +36,7 @@ const Equipments = () => {
 
     useEffect(() => {
         const countAll = data?.count?._count ?? 0;
-        if(countAll >= take) {
+        if (countAll >= take) {
             setCountPage(Math.round(countAll / take))
         } else {
             setCountPage(1)
@@ -44,15 +44,35 @@ const Equipments = () => {
 
     }, [debouncedValue, take, setCountPage, data]);
 
-    const [open, setOpen] = useState(false);
-    const [idSelected, setIdSelected] = useState<number | null>(null)
+    const [renderedModal,
+        setOpen,
+        setTypeModal,
+        setProps] = useModal()
 
-    const handleOpen = useCallback((id: number) => {
-        setIdSelected(id)
+
+    // Функция для обработки вызов попапа редактирования оборудования
+    const handleOpenUpdateCard = useCallback((id: number) => {
         setOpen(true)
-    }, [setIdSelected])
-    const handleClose = () => setOpen(false);
+        setTypeModal(ModalTypes.UPDATE_CARD)
+        setProps((prevProps: any) => ({
+            ...prevProps,
+            id,
+        }));
+    }, [setTypeModal, setOpen, setProps])
 
+
+    // Функция для обработки вызов попапа подтверждения удаления
+    const handleOpenModalConfirm = useCallback(
+        (cbDeleteCard: any) => {
+            setOpen(true)
+            setTypeModal(ModalTypes.CONFIRM_MODAL)
+            setProps({
+                msg: "Вы уверен, что хотите удалить оборудование?",
+                actionFunc: cbDeleteCard,
+            })
+        },
+        [setProps, setOpen, setTypeModal],
+    );
 
     const handleSearchName = useCallback(
         (value: string) => {
@@ -62,41 +82,22 @@ const Equipments = () => {
     );
 
     const renderCard = useMemo(() => {
-        const equipmentsData = data?.data ?? []
-        if(!isLoading) {
+        const equipmentsData = data?.data
+        if (equipmentsData && !isLoading && isSuccess) {
             return equipmentsData?.map((equipment: Equipment) => {
-                return <CardEquipment openPopup={handleOpen}
+                return <CardEquipment openPopupUpdate={handleOpenUpdateCard}
+                                      openModalConfirm={handleOpenModalConfirm}
                                       key={equipment?.id}
                                       data={equipment}
                                       setShowDeleteAlert={setShowDeleteAlert}/>
             })
         }
-    }, [data, handleOpen, isLoading]);
+    }, [data, handleOpenUpdateCard, isLoading, isSuccess, setShowDeleteAlert]);
 
     if (isLoading) return <p>Загрузка...</p>
     return (
         <div className="w-full pb-10">
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 600,
-                    bgcolor: 'background.paper',
-                    border: '2px solid #000',
-                    boxShadow: 24,
-                    p: 4,
-                    color: "black"
-                }}>
-                    <UpdateCard id={idSelected} close={handleClose}/>
-                </Box>
-            </Modal>
+            {renderedModal}
             <Panel/>
             <Box className={"flex items-center justify-between"}>
                 <InputSearch searchValue={searchName} setSearchValue={handleSearchName}/>

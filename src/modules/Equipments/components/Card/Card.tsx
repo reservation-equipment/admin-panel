@@ -4,7 +4,7 @@ import {baseUrl} from "../../../../config/api.ts";
 import {YANDEX_URL_S3_IMAGE} from "../../../../config/YandexStorage.ts";
 import {Link} from "react-router-dom";
 
-const CardEquipment = ({data, openPopup, setShowDeleteAlert}: any) => {
+const CardEquipment = ({data, openPopupUpdate, setShowDeleteAlert, openModalConfirm}: any) => {
     const queryClient = useQueryClient();
 
     const deletePost = useMutation((id) => {
@@ -17,6 +17,10 @@ const CardEquipment = ({data, openPopup, setShowDeleteAlert}: any) => {
             setShowDeleteAlert(true)
         }
     });
+
+    const handleDelete = () => {
+        deletePost.mutate(data.id)
+    }
 
 
     return (
@@ -53,8 +57,8 @@ const CardEquipment = ({data, openPopup, setShowDeleteAlert}: any) => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" onClick={() => openPopup(data.id)}>Редактировать</Button>
-                    <Button size="small" onClick={() => deletePost.mutate(data.id)}>Удалить</Button>
+                    <Button size="small" onClick={() => openPopupUpdate(data.id)}>Редактировать</Button>
+                    <Button size="small" onClick={() => openModalConfirm(handleDelete)}>Удалить</Button>
                 </CardActions>
             </Card>
 

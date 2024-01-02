@@ -9,3 +9,8 @@ export interface DepartmentInfo {
     area: string
     institute: string
 }
+
+export type fetchAllInfoDepartmentT = {
+    skip: number
+    take: number
+}

@@ -1,10 +1,10 @@
 import {useQuery} from "react-query";
-import {getAllInfo} from "../api/Departments.ts";
-import {DepartmentInfo} from "../shared/types/Departments.ts";
+import {fetchAllInfoDepartment} from "../api/Departments.ts";
+import {DepartmentInfo, fetchAllInfoDepartmentT} from "../shared/types/Departments.ts";
 
-export const useDepartmentInfo = () => {
+export const useDepartmentInfo = (filter: fetchAllInfoDepartmentT) => {
     return useQuery<DepartmentInfo[], Error>({
         queryKey: ["infoTables"],
-        queryFn: getAllInfo
+        queryFn: () => fetchAllInfoDepartment(filter)
     })
 }

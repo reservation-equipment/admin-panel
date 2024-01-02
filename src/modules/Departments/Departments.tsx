@@ -32,11 +32,13 @@ const columns: GridColDef[] = [
 ];
 
 
-
 const Departments = () => {
-    const {data, isLoading} = useDepartmentInfo()
+    const {data, isLoading} = useDepartmentInfo({
+        skip: 0,
+        take: 0
+    })
 
-    if(isLoading)return <p>loading...</p>
+    if (isLoading) return <p>loading...</p>
 
     return (
         <Box sx={{

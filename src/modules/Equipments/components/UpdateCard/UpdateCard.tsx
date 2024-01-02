@@ -3,7 +3,8 @@ import {Controller, useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {baseUrl} from "../../../../config/api.ts";
 import {useEffect, useMemo} from "react";
-import {getAllAreas} from "../../../../api/Areas.ts";
+import {useGetAreas} from "../../../../hooks/useGetAreas.ts";
+import {Area} from "../../../../shared/types/Area.ts";
 
 type UpdateCardProps = {
     id: number | null
@@ -13,10 +14,7 @@ type UpdateCardProps = {
 const UpdateCard = ({id, close}: UpdateCardProps) => {
     const queryClient = useQueryClient();
 
-    const {data, isLoading} = useQuery({
-        queryKey: ["areas"],
-        queryFn: getAllAreas
-    })
+    const {data, isLoading, isSuccess} = useGetAreas()
 
     const {data: oldData, isLoading: oldIsLoading} = useQuery({
         queryKey: ["equipmentsUpdate"],
@@ -28,8 +26,6 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
         handleSubmit,
         reset,
         control,
-        unregister,
-        setValue,
     } = useForm({
         defaultValues: oldData
     });
@@ -61,14 +57,20 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
     }
 
     const renderSelectItems = useMemo(() => {
-        return  data?.data.map((area: any) => {
-            return <MenuItem key={area.id} value={area.id}>{area.name}</MenuItem>
-        })
-    }, [data]);
+        if(data && !isLoading && isSuccess) {
+            return  data?.map((area: Area) => {
+                return <MenuItem key={area.id} value={area.id}>{area.name}</MenuItem>
+            })
+        }
+    }, [data, isLoading, isSuccess]);
 
     if (isLoading || oldIsLoading) return <p>Loading....</p>
     return (
-        <form onSubmit={handleSubmit(handleUpdateEquipment)} className={"w-full flex flex-col gap-6 mt-8"}>
+        <form onSubmit={handleSubmit(handleUpdateEquipment)}
+              style={{
+                  minWidth: 600
+              }}
+              className={"flex flex-col gap-6 mt-8"}>
             <TextField type={"text"}
                        label="Название"
                        id={"CreateForm_name"}
