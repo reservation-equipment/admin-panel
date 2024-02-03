@@ -1,10 +1,19 @@
 import {baseUrl} from "../config/api.ts";
+import $api from "@src/api/axios.ts";
 
-export const getBookings = (selectDate?: string | undefined) => {
-    let query = `${baseUrl}/bookings`
-    if(selectDate) {
-        query += `?date_to=${selectDate}&skip=0&take=10`
-    }
-    console.log(query)
-    return fetch(query).then(response => response.json())
+export const getBookings = (selectDate: Date | undefined) => {
+
+    return $api.get(`${baseUrl}/bookings`, {
+        params: {
+            ...((selectDate) ? {
+                date_to: new Date(selectDate)?.toISOString()
+            } : {}),
+            skip: 0,
+            take: 10
+        }
+    }).then(res => res.data)
+}
+
+export const fetchBookingDates = () => {
+    return $api.get(`${baseUrl}/booking_dates`).then(res => res?.data?.data)
 }

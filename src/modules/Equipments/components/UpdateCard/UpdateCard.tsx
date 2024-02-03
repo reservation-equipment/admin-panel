@@ -1,24 +1,26 @@
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {baseUrl} from "../../../../config/api.ts";
-import {useEffect, useMemo} from "react";
-import {useGetAreas} from "../../../../hooks/useGetAreas.ts";
-import {Area} from "../../../../shared/types/Area.ts";
+import {baseUrl} from "@src/config/api.ts";
+import {Dispatch, SetStateAction, useEffect, useMemo} from "react";
+import {useGetAreas} from "@src/hooks/useGetAreas.ts";
+import {Area} from "@src/shared/types/Area.ts";
+import {Alert, AlertTypes} from "@src/hooks/useAlert.tsx";
 
 type UpdateCardProps = {
     id: number | null
     close: () => void
+    setAlert:  Dispatch<SetStateAction<Alert>>
 }
 
-const UpdateCard = ({id, close}: UpdateCardProps) => {
+const UpdateCard = ({id, close, setAlert}: UpdateCardProps) => {
     const queryClient = useQueryClient();
 
     const {data, isLoading, isSuccess} = useGetAreas()
 
     const {data: oldData, isLoading: oldIsLoading} = useQuery({
         queryKey: ["equipmentsUpdate"],
-        queryFn: () => fetch(`${baseUrl}/equipment/${id}`).then(res => res.json()),
+        queryFn: () => fetch(`${baseUrl}/equipment/${id}`).then(res => res.json())
     })
 
     const {
@@ -46,14 +48,20 @@ const UpdateCard = ({id, close}: UpdateCardProps) => {
             });
             return await res.json();
         }, {
-        onSuccess: () => queryClient.invalidateQueries(['equipments'])
+        onSuccess: () => {
+            queryClient.invalidateQueries(['equipments'])
+            setAlert({
+                type: AlertTypes.UPDATE_EQUIPMENT,
+                msg: "Оборудование успешно обновлено!",
+                isOpen: true
+            })
+        }
     })
 
     const handleUpdateEquipment = async (data: any) => {
         data.count = Number(data.count)
         mutate(data)
         close()
-
     }
 
     const renderSelectItems = useMemo(() => {

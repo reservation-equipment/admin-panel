@@ -1,10 +1,20 @@
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import {useMutation, useQueryClient} from "react-query";
-import {baseUrl} from "../../../../config/api.ts";
-import {YANDEX_URL_S3_IMAGE} from "../../../../config/YandexStorage.ts";
+import {baseUrl} from "@src/config/api.ts";
+import {YANDEX_URL_S3_IMAGE} from "@src/config/YandexStorage.ts";
 import {Link} from "react-router-dom";
+import {Alert, AlertTypes} from "@src/hooks/useAlert.tsx";
+import {Equipment} from "@src/shared/types/Equipments.ts";
+import {Dispatch, SetStateAction} from "react";
 
-const CardEquipment = ({data, openPopupUpdate, setShowDeleteAlert, openModalConfirm}: any) => {
+type PropsCardEquipment = {
+    data: Equipment
+    openPopupUpdate: (id: number) => void
+    setShowDeleteAlert: Dispatch<SetStateAction<Alert>>
+    openModalConfirm: (cbDeleteCard: any) => void
+}
+
+const CardEquipment = ({data, openPopupUpdate, setShowDeleteAlert, openModalConfirm}: PropsCardEquipment) => {
     const queryClient = useQueryClient();
 
     const deletePost = useMutation((id) => {
@@ -14,7 +24,11 @@ const CardEquipment = ({data, openPopupUpdate, setShowDeleteAlert, openModalConf
     }, {
         onSuccess: () => {
             queryClient.invalidateQueries(['equipments'])
-            setShowDeleteAlert(true)
+            setShowDeleteAlert({
+                type: AlertTypes.DELETE_EQUIPMENT,
+                msg: "Оборудование успешно удалено!",
+                isOpen: true
+            })
         }
     });
 

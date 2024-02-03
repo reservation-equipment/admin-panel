@@ -10,7 +10,6 @@ const Dashboard = () => {
 
     const renderBreadcrumbsList = useMemo(() => {
         return breadcrumbsList.map((route: string, ix: number) => {
-            console.log()
             if (route.match(/^\d+$/)) {
                 return {
                     label: route,

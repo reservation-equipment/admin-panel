@@ -1,25 +1,25 @@
-import CalendarBooking from "./components/CalendarBooking.tsx";
 import BookingList from "./components/BookingList.tsx";
-import {useQuery} from "react-query";
-import {getBookings} from "../../api/Booking.ts";
-import {useState} from "react";
+import {useBooking} from "@src/hooks/useBooking.ts";
 
 const BookingHistory = () => {
-    // const [selectDate, setSelectDate] = useState<string | undefined>("")
+    // const [selectDate, setSelectDate] = useState<Date | undefined>()
 
-    const {data, isLoading} = useQuery({
-        queryKey: ["booking"],
-        queryFn: () => getBookings()
-    })
+    const {data, isLoading} = useBooking()
 
+    // const renderCalender = useMemo(() => {
+    //     return (
+    //         <CalendarBooking handleSelect={setSelectDate}/>
+    //     )
+    // }, [])
 
-
-    if(isLoading) return <p>Loading</p>
+    if (isLoading) return <p style={{
+        color: "black"
+    }}>Loading</p>
 
     return (
-        <div className={"grid grid-cols-2 gap-x-40"}>
-            <BookingList data={data?.data}/>
-            {/*<CalendarBooking data={data?.data} handleSelect={setSelectDate}/>*/}
+        <div className={"grid grid-cols-1 gap-x-40"}>
+            <BookingList data={data?.data ?? []}/>
+            {/*{renderCalender}*/}
         </div>
     );
 };

@@ -27,3 +27,7 @@ export type TBooking = {
 
     }
 }
+
+export type BookingDatesList = {
+    date_to: string
+}

@@ -1,10 +1,10 @@
 import {useMutation, useQueryClient} from "react-query";
 import {useForm} from "react-hook-form";
-import {baseUrl} from "../../../../config/api.ts";
+import {baseUrl} from "@src/config/api.ts";
 import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useMemo} from "react";
-import {InstitutesModel} from "../../../../shared/types/Departments.ts";
-import {useInstitutes} from "../../../../hooks/useInstitutes.ts";
+import {InstitutesModel} from "@src/shared/types/Departments.ts";
+import {useInstitutes} from "@src/hooks/useInstitutes.ts";
 
 const CreateArea = () => {
     const queryClient = useQueryClient();

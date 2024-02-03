@@ -1,16 +1,17 @@
-import {Alert, Button, Fade, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {Button, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {useMemo} from "react";
 import DropzoneFiles from "../../../../shared/components/dropfiles/DropzoneFiles.tsx";
-import {useUploadImages} from "../../../../hooks/useUploadImages.ts";
-import {useGetAreas} from "../../../../hooks/useGetAreas.ts";
-import {Area} from "../../../../shared/types/Area.ts";
-import {useCreateEquipment} from "../../../../hooks/useCreateEquipment.ts";
-import {useShowAlert} from "../../../../hooks/useShowAlert.ts";
+import {useUploadImages} from "@src/hooks/useUploadImages.ts";
+import {useGetAreas} from "@src/hooks/useGetAreas.ts";
+import {Area} from "@src/shared/types/Area.ts";
+import {useCreateEquipment} from "@src/hooks/useCreateEquipment.ts";
+import {AlertTypes, useAlert} from "@src/hooks/useAlert.tsx";
 
 
 const CreateCard = () => {
-    const [showAlert, setShowAlert] = useShowAlert()
+    const [ setAlert,
+        renderedAlert] = useAlert()
 
     const uploadFiles = useUploadImages()
 
@@ -30,7 +31,11 @@ const CreateCard = () => {
         data.area_id = Number(data.area_id)
         mutation.mutate(data);
         if (mutation.isSuccess || !mutation.isLoading) {
-            setShowAlert(true)
+            setAlert({
+                type: AlertTypes.CREATE_EQUIPMENT,
+                msg: "Оборудование успешно создано!",
+                isOpen: true
+            })
             const newEquipment = await mutation.data;
             await uploadFiles(data.image_equipment, newEquipment.id++);
         }
@@ -46,16 +51,7 @@ const CreateCard = () => {
 
     return (
         <>
-            {showAlert && <Fade in={showAlert}>
-                <Alert variant={"filled"} style={{
-                    width: 400,
-                    position: 'fixed',
-                    right: 50,
-                    top: 50
-                }} severity="success">
-                    Оборудование успешно создано
-                </Alert>
-            </Fade>}
+            {renderedAlert}
             <form onSubmit={handleSubmit(handleCreateEquipment)} className={"w-full flex flex-col gap-6 mt-8"}>
                 <TextField type={"text"}
                            label="Название"

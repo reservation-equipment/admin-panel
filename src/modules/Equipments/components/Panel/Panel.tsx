@@ -1,6 +1,6 @@
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import CreateCard from "../CreateCard/CreateCard.tsx";
-import {uiBaseColors} from "../../../../config/styles/baseColors.ts";
+import {uiBaseColors} from "@src/config/styles/baseColors.ts";
 
 
 const Panel = () => {

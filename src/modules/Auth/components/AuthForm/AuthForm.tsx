@@ -1,14 +1,15 @@
 import {useForm} from "react-hook-form";
-import {Alert, AlertTitle, Button, Fade, TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import {useNavigate,} from "react-router-dom";
 import AuthService from "../../../../services/AuthService.ts";
-import {LogInRequest} from "../../../../shared/types/Auth.ts";
-import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../../../../context/AuthContext.tsx";
-import {UserRoles} from "../../../../shared/types/User.ts";
-import {rootPath} from "../../../../config/menuItems.tsx";
+import {LogInRequest} from "@src/shared/types/Auth.ts";
+import {useContext} from "react";
+import {AuthContext} from "@src/context/AuthContext.tsx";
+import {UserRoles} from "@src/shared/types/User.ts";
+import {rootPath} from "@src/config/menuItems.tsx";
+import {AxiosError} from "axios";
+import {AlertTypes, useAlert} from "@src/hooks/useAlert.tsx";
 
-const TIMER_FADE_ALERT = 3000
 
 const AuthForm = () => {
     const {
@@ -20,40 +21,43 @@ const AuthForm = () => {
             password: ""
         }
     });
-    const [showAlert, setShowAlert] = useState(false)
+    const [setAlert, renderedAlert] = useAlert()
     const navigate = useNavigate();
-    const {dispatch, state} = useContext(AuthContext)
-
-    useEffect(() => {
-        if (!state?.isAdmin && !state?.isOwner) {
-
-            setShowAlert(true)
-            const timeout = setTimeout(() => {
-                setShowAlert(false);
-            }, TIMER_FADE_ALERT);
-
-            return () => {
-                clearTimeout(timeout);
-            }
-        }
-    }, [state])
+    const {dispatch, } = useContext(AuthContext)
 
     const onSubmit = async (formData: LogInRequest) => {
-        const {email, password} = formData;
-        const {data} = await AuthService.signIn(email, password)
-        dispatch({
-            type: "LOGIN",
-            payload: data.user
-        })
-        if (data.user.role === UserRoles.USER) {
-            console.log(data.user.role, "Юзер не является владельцем или админом")
-            return null
+        try {
+            const {email, password} = formData;
+            const {data} = await AuthService.signIn(email, password)
+            dispatch({
+                type: "LOGIN",
+                payload: data.user
+            })
+            if (data.user.role === UserRoles.USER) {
+                setAlert({
+                    msg: "У вас недостаточно прав",
+                    isOpen: true,
+                    type: AlertTypes.ACCESS_DENIED
+                })
+                return null
+            }
+
+            localStorage.setItem("token", data.accessToken)
+
+            navigate(rootPath)
+
+        } catch (e: AxiosError | Error) {
+            const {response} = e;
+
+            if (response.status === 400) {
+                setAlert({
+                    msg: response.data.msg,
+                    type: AlertTypes.USER_NOT_FOUND,
+                    isOpen: true
+                })
+            }
         }
-        localStorage.setItem("token", data.accessToken)
-
-        navigate(rootPath)
     }
-
 
     return (
         <>
@@ -82,19 +86,7 @@ const AuthForm = () => {
                     }}>{"Войти"}</Button>
                 </form>
             </div>
-            {
-                (state?.isAuth) && <Fade in={showAlert}>
-                    <Alert variant={"filled"} style={{
-                        width: 400,
-                        position: 'absolute',
-                        right: 50,
-                        top: 50
-                    }} severity="error">
-                        <AlertTitle>Error</AlertTitle>
-                        У вас недостаточно прав
-                    </Alert>
-                </Fade>
-            }
+            {renderedAlert}
         </>
     );
 };

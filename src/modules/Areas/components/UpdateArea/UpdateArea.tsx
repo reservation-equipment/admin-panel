@@ -1,13 +1,14 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {baseUrl} from "../../../../config/api.ts";
+import {baseUrl} from "@src/config/api.ts";
 import {useForm} from "react-hook-form";
-import {useEffect} from "react";
+import {Dispatch, SetStateAction, useEffect} from "react";
 import {Button, TextField} from "@mui/material";
+import {Alert, AlertTypes} from "@src/hooks/useAlert.tsx";
 
 type UpdateAreaProps = {
     id: number | null
     close: () => void
-    setShowAlert: (value: boolean) => void
+    setShowAlert: Dispatch<SetStateAction<Alert>>,
 }
 
 
@@ -48,7 +49,11 @@ const UpdateArea = ({id, close, setShowAlert}: UpdateAreaProps) => {
             return await res.json();
         }, {
             onSuccess: () => {
-                setShowAlert(true)
+                setShowAlert({
+                    type: AlertTypes.UPDATE_AREAS,
+                    msg: "Помещение успешно обновлено!",
+                    isOpen: true
+                })
                 queryClient.invalidateQueries(['areas'])
             }
         })

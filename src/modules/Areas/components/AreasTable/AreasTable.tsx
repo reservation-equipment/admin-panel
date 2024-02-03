@@ -10,14 +10,14 @@ import {
     GridRowModesModel,
     GridToolbarContainer,
 } from '@mui/x-data-grid';
-import {baseUrl} from "../../../../config/api.ts";
+import {baseUrl} from "@src/config/api.ts";
 import {useState} from "react";
 import {Button} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {randomId} from "@mui/x-data-grid-generator";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {useGetAreas} from "../../../../hooks/useGetAreas.ts";
+import {useGetAreas} from "@src/hooks/useGetAreas.ts";
 
 interface EditToolbarProps {
     setRowModesModel: (

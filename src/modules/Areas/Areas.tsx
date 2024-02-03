@@ -1,13 +1,15 @@
 import AreasTable from "./components/AreasTable/AreasTable.tsx";
 import CreateArea from "./components/CreateArea/CreateArea.tsx";
 import {useState} from "react";
-import {Alert, Box, Fade, Modal} from "@mui/material";
+import {Box, Modal} from "@mui/material";
 import UpdateArea from "./components/UpdateArea/UpdateArea.tsx";
-import {useShowAlert} from "../../hooks/useShowAlert.ts";
+import {useAlert} from "@src/hooks/useAlert.tsx";
 
 
 const Areas = () => {
-    const [showAlert, setShowAlert] = useShowAlert()
+    const [
+        setAlert,
+        renderedAlert] = useAlert()
     const [openUpdatePopup, setOpenUpdatePopup] = useState(false)
     const [idSelected, setIdSelected] = useState<number | null>(null)
     const handleClose = () => setOpenUpdatePopup(false);
@@ -37,21 +39,13 @@ const Areas = () => {
                     p: 4,
                     color: "black"
                 }}>
-                    <UpdateArea id={idSelected} close={handleClose} setShowAlert={setShowAlert}/>
+                    <UpdateArea id={idSelected} close={handleClose} setShowAlert={setAlert}/>
                 </Box>
             </Modal>
             <CreateArea/>
             <AreasTable openPopup={handleOpen}/>
-            {showAlert && <Fade in={showAlert}>
-                <Alert variant={"filled"} style={{
-                    width: 400,
-                    position: 'absolute',
-                    right: 50,
-                    top: 50
-                }} severity="success">
-                    Помещение успешно обновлено
-                </Alert>
-            </Fade>}
+            {renderedAlert}
+
         </>
     );
 };

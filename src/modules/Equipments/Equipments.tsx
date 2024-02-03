@@ -1,17 +1,20 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import Panel from "./components/Panel/Panel.tsx";
 import CardEquipment from "./components/Card/Card.tsx";
-import {Alert, Box, Fade, Pagination} from "@mui/material";
-import InputSearch from "../../shared/components/InputSearch/InputSearch.tsx";
-import {useDebounce} from "../../hooks/useDebounce.ts";
-import {usePagination} from "../../hooks/usePagination.ts";
-import {useGetEquipments} from "../../hooks/useGetEquipments.ts";
-import {Equipment} from "../../shared/types/Equipments.ts";
-import {useShowAlert} from "../../hooks/useShowAlert.ts";
-import {ModalTypes, useModal} from "../../hooks/useModal.tsx";
+import {Box, Pagination} from "@mui/material";
+import {useDebounce} from "@src/hooks/useDebounce.ts";
+import {usePagination} from "@src/hooks/usePagination.ts";
+import {useGetEquipments} from "@src/hooks/useGetEquipments.ts";
+import {ModalTypes, useModal} from "@src/hooks/useModal.tsx";
+import {Equipment} from "@src/shared/types/Equipments.ts";
+import InputSearch from "@src/shared/components/InputSearch/InputSearch.tsx";
+import {useAlert} from "@src/hooks/useAlert.tsx";
 
 const Equipments = () => {
-    const [showDeleteAlert, setShowDeleteAlert] = useShowAlert()
+    const [
+        setAlert,
+        renderedAlert] = useAlert()
+
     const [searchName, setSearchName] = useState("")
 
     const debouncedValue = useDebounce(searchName, 700)
@@ -56,9 +59,10 @@ const Equipments = () => {
         setTypeModal(ModalTypes.UPDATE_CARD)
         setProps((prevProps: any) => ({
             ...prevProps,
+            setAlert,
             id,
         }));
-    }, [setTypeModal, setOpen, setProps])
+    }, [setTypeModal, setOpen, setProps, setAlert])
 
 
     // Функция для обработки вызов попапа подтверждения удаления
@@ -89,10 +93,10 @@ const Equipments = () => {
                                       openModalConfirm={handleOpenModalConfirm}
                                       key={equipment?.id}
                                       data={equipment}
-                                      setShowDeleteAlert={setShowDeleteAlert}/>
+                                      setShowDeleteAlert={setAlert}/>
             })
         }
-    }, [data, handleOpenUpdateCard, isLoading, isSuccess, setShowDeleteAlert]);
+    }, [data, handleOpenUpdateCard, isLoading, isSuccess, setAlert]);
 
     if (isLoading) return <p>Загрузка...</p>
     return (
@@ -121,16 +125,7 @@ const Equipments = () => {
                 gap-x-4`}>
                 {renderCard}
             </div>
-            {showDeleteAlert && <Fade in={showDeleteAlert}>
-                <Alert variant={"outlined"} style={{
-                    width: 400,
-                    position: 'fixed',
-                    right: 50,
-                    top: 50
-                }} severity="success">
-                    Оборудование успешно удалено
-                </Alert>
-            </Fade>}
+            {renderedAlert}
         </div>
     );
 };
