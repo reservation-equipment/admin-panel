@@ -1,12 +1,12 @@
 import { Button, InputLabel, TextField } from "@mui/material";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import DropzoneFiles from "../../shared/components/dropfiles/DropzoneFiles.tsx";
 import { useUploadImages } from "@src/shared/hooks/useUploadImages.ts";
 import { useGetAreas } from "@src/shared/hooks/useGetAreas.ts";
 import { useCreateEquipment } from "@src/shared/hooks/useCreateEquipment.ts";
 import { AlertTypes, useAlert } from "@src/shared/hooks/useAlert.tsx";
-import { Equipment } from "@src/entities/equipment/Equipments.ts";
 import { UICustomSelect } from "@src/shared/ui/form/custom-select/ui-custom-select.tsx";
+import DropzoneFiles from "@src/shared/components/dropfiles";
+import Equipment from "@src/entities/equipment";
 
 const CreateCard = () => {
   const [setAlert, renderedAlert] = useAlert();

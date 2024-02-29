@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
-import { useAlert } from "@src/shared/hooks/useAlert.tsx";
 import { CardList } from "../widgets/card-list";
 import { usePagination } from "@src/shared/components/pagination/model/usePagination.ts";
 import { useGetEquipments } from "@src/widgets/card-list/model/card-equipment.model.ts";
@@ -10,8 +9,6 @@ import CustomPagination from "@src/shared/components/pagination";
 import InputSearch from "@src/shared/components/search";
 
 const Equipments = () => {
-  const [setAlert, renderedAlert] = useAlert();
-
   const [searchName, setSearchName] = useState("");
   const { setTotalItems, skip, take, totalPages, goToPage, currentPage } =
     usePagination(15);
@@ -24,13 +21,16 @@ const Equipments = () => {
     skip,
   });
 
-  const isSuccessfulData = isSuccess && !isLoading ? data.data : [];
+  const isSuccessfulData = useMemo(
+    () => (isSuccess && !isLoading ? data.data : []),
+    [isSuccess, isLoading, data]
+  );
 
   useEffect(() => {
     if (isSuccessfulData && data) {
       setTotalItems(data.count._count);
     }
-  }, [isSuccessfulData]);
+  }, [isSuccessfulData, data, setTotalItems]);
 
   const handleSearchName = useCallback(
     (value: string) => {
@@ -54,7 +54,6 @@ const Equipments = () => {
         />
       </Box>
       <CardList data={isSuccessfulData} />
-      {renderedAlert}
     </div>
   );
 };

@@ -6,9 +6,11 @@ const $api = axios.create({
   baseURL: baseUrl,
 });
 
-$api.interceptors.request.use((config: any) => {
-    config.headers.Authorization = `Bearer ${window.localStorage.getItem('token')}`
-    return config
-})
+$api.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${window.localStorage.getItem(
+    "token"
+  )}`;
+  return config;
+});
 
-export default $api
+export default $api;

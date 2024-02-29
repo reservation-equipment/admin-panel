@@ -3,6 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { menuItems } from "@src/app/config/menuItems.tsx";
 import { Breadcrumbs } from "@mui/material";
 
+type RouteBreadcrumbs = {
+  label: string;
+  link: string;
+};
+
 const CustomBreadcrumbs = () => {
   const location = useLocation();
   const breadcrumbsList = location.pathname.split("/");
@@ -27,17 +32,19 @@ const CustomBreadcrumbs = () => {
 
   return (
     <Breadcrumbs className={"w-auto pb-6"}>
-      {renderBreadcrumbsList.map((route: any, ix: number, arr: any) => {
-        if (arr.length - 1 == ix) {
-          return <p key={ix}>{route.label}</p>;
-        } else {
-          return (
-            <Link key={ix} color="inherit" to={route.link}>
-              {route.label}
-            </Link>
-          );
+      {renderBreadcrumbsList.map(
+        (route: RouteBreadcrumbs, ix: number, arr: RouteBreadcrumbs[]) => {
+          if (arr.length - 1 == ix) {
+            return <p key={ix}>{route.label}</p>;
+          } else {
+            return (
+              <Link key={ix} color="inherit" to={route.link}>
+                {route.label}
+              </Link>
+            );
+          }
         }
-      })}
+      )}
     </Breadcrumbs>
   );
 };

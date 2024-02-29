@@ -16,8 +16,8 @@ import { PrivateRoute } from "../shared/hoc/PrivateRoute.tsx";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EquipmentDetail from "../pages/EquipmentDetail.tsx";
-import CustomBreadcrumbs from "@src/shared/components/custom-breadcrumbs/custom-breadcrumbs.tsx";
 import SideMenu from "@src/widgets/side-menu/SideMenu.tsx";
+import CustomBreadcrumbs from "@src/shared/components/custom-breadcrumbs";
 
 const router = createBrowserRouter(
   [

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export const usePagination = (itemsPerPage: number) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -6,7 +6,7 @@ export const usePagination = (itemsPerPage: number) => {
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const goToPage = (event: React.ChangeEvent<unknown>, value: number) => {
+  const goToPage = (_event: ChangeEvent<unknown>, value: number) => {
     setCurrentPage(Math.min(Math.max(1, value), totalPages));
   };
 

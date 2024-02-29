@@ -1,6 +1,12 @@
 import { Box, Modal } from "@mui/material";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
-const ModalWrapper = (props: any) => {
+const ModalWrapper = (props: {
+  handleClose: () => void;
+  open: boolean;
+  children: ReactNode;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { handleClose, open, children } = props;
   return (
     <Modal

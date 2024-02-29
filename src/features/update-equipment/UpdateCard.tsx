@@ -9,10 +9,12 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
-import { Area } from "@src/entities/area/Area.ts";
 import { useGetAreas } from "@src/shared/hooks/useGetAreas.ts";
-import { Alert, AlertTypes } from "@src/shared/hooks/useAlert.tsx";
 import { baseUrl } from "@src/app/config/api.ts";
+import Area from "@src/entities/area";
+import { Equipment } from "@src/entities/equipment/equipments.ts";
+import { Alert } from "@src/entities/alert";
+import { AlertTypes } from "@src/shared/hooks/useAlert.tsx";
 
 type UpdateCardProps = {
   id: number | null;
@@ -37,10 +39,10 @@ const UpdateCard = ({ id, close, setAlert }: UpdateCardProps) => {
 
   useEffect(() => {
     reset(oldData);
-  }, [oldData]);
+  }, [oldData, reset]);
 
   const { mutate } = useMutation(
-    async (equipment) => {
+    async (equipment: Equipment) => {
       const res = await fetch(`${baseUrl}/equipment`, {
         method: "PATCH",
         headers: {
@@ -63,7 +65,7 @@ const UpdateCard = ({ id, close, setAlert }: UpdateCardProps) => {
     }
   );
 
-  const handleUpdateEquipment = async (data: any) => {
+  const handleUpdateEquipment = async (data: Equipment) => {
     data.count = Number(data.count);
     mutate(data);
     close();

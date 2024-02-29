@@ -5,6 +5,7 @@ import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useMemo } from "react";
 import { InstitutesModel } from "@src/entities/department/department.ts";
 import { useInstitutes } from "@src/shared/hooks/useInstitutes.ts";
+import { Area } from "@src/entities/area/area.ts";
 
 const CreateArea = () => {
   const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ const CreateArea = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const mutation = useMutation(
-    (area) => {
+    (area: Area) => {
       return fetch(`${baseUrl}/area`, {
         method: "post",
         headers: {
@@ -28,7 +29,7 @@ const CreateArea = () => {
     }
   );
 
-  const handleCreateArea = (data: any) => {
+  const handleCreateArea = (data: Area) => {
     data.square = Number(data.square);
     mutation.mutate(data);
     reset();

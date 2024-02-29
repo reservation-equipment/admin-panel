@@ -1,15 +1,19 @@
 import { useCallback, useMemo } from "react";
-import { Equipment } from "@src/entities/equipment/Equipments.ts";
+import Equipment from "@src/entities/equipment";
 import CardListLayout from "@src/widgets/card-list/ui/card-list-layout.tsx";
 import CardEquipment from "@src/entities/equipment-card";
 import { useMutation, useQueryClient } from "react-query";
 import { baseUrl } from "@src/app/config/api.ts";
-import { ModalTypes, useModal } from "@src/shared/hooks/useModal.tsx";
-import { useAlert } from "@src/shared/hooks/useAlert.tsx";
+import {
+  ModalTypes,
+  PropsModal,
+  useModal,
+} from "@src/shared/hooks/useModal.tsx";
+import { AlertTypes, useAlert } from "@src/shared/hooks/useAlert.tsx";
 
 export const CardList = ({ data }: { data: Equipment[] }) => {
   const queryClient = useQueryClient();
-  const [setAlert, renderedAlert] = useAlert();
+  const [setShowDeleteAlert, renderedAlert] = useAlert();
   const [renderedModal, setOpen, setTypeModal, setProps] = useModal();
 
   const deletePost = useMutation<Response, unknown, number>(
@@ -21,11 +25,11 @@ export const CardList = ({ data }: { data: Equipment[] }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["equipments"]);
-        // setShowDeleteAlert({
-        //     type: AlertTypes.DELETE_EQUIPMENT,
-        //     msg: "Оборудование успешно удалено!",
-        //     isOpen: true
-        // })
+        setShowDeleteAlert({
+          type: AlertTypes.DELETE_EQUIPMENT,
+          msg: "Оборудование успешно удалено!",
+          isOpen: true,
+        });
       },
     }
   );
@@ -34,26 +38,26 @@ export const CardList = ({ data }: { data: Equipment[] }) => {
     (id: number) => {
       setOpen(true);
       setTypeModal(ModalTypes.UPDATE_EQUIPMENT);
-      setProps((prevProps: any) => ({
+      setProps((prevProps: PropsModal) => ({
         ...prevProps,
-        setAlert,
+        setAlert: setShowDeleteAlert,
         id,
       }));
     },
-    [setTypeModal, setOpen, setProps, setAlert]
+    [setTypeModal, setOpen, setProps, setShowDeleteAlert]
   );
 
   // Функция для обработки вызов попапа подтверждения удаления
   const handleOpenModalConfirm = useCallback(
-    (cbDeleteCard: any) => {
+    (cbDeleteCard: () => void) => {
       setOpen(true);
       setTypeModal(ModalTypes.CONFIRM_MODAL);
-      // setProps({
-      //     id: undefined,
-      //     setAlert: undefined,
-      //     msg: "Вы уверен, что хотите удалить оборудование?",
-      //     actionFunc: cbDeleteCard,
-      // })
+      setProps({
+        id: undefined,
+        setAlert: undefined,
+        msg: "Вы уверен, что хотите удалить оборудование?",
+        actionFunc: cbDeleteCard,
+      });
     },
     [setProps, setOpen, setTypeModal]
   );
@@ -83,15 +87,12 @@ export const CardList = ({ data }: { data: Equipment[] }) => {
         );
       });
     }
-  }, [
-    data,
-    handleOpenUpdateCard,
-    // setAlert
-  ]);
+  }, [data, handleOpenUpdateCard]);
   return (
     <CardListLayout>
       {renderedModal}
       {renderCards}
+      {renderedAlert}
     </CardListLayout>
   );
 };

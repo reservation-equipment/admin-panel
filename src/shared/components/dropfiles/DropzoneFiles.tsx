@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import { Close } from "@mui/icons-material";
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormUnregister,
+} from "react-hook-form";
 
 const baseStyle = {
   flex: 1,
@@ -31,14 +37,21 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-const DropzoneFiles = (props: any) => {
+type CustomFile = File & { preview: string };
+
+const DropzoneFiles = (props: {
+  name: string;
+  register: UseFormRegister<FieldValues>;
+  unregister: UseFormUnregister<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
+}) => {
   const { name, register, unregister, setValue } = props;
-  const [files, setFiles] = useState<any>([]);
-  const [rejected, setRejected] = useState<any>([]);
+  const [files, setFiles] = useState<CustomFile[]>([]);
+  const [rejected, setRejected] = useState<FileRejection[]>([]);
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (acceptedFiles?.length) {
-      setFiles((previousFiles: File[]) => [
+      setFiles((previousFiles: CustomFile[]) => [
         ...previousFiles,
         ...acceptedFiles.map((file) =>
           Object.assign(file, { preview: URL.createObjectURL(file) })
@@ -46,7 +59,6 @@ const DropzoneFiles = (props: any) => {
       ]);
     }
 
-    console.log(files);
     if (rejectedFiles?.length) {
       setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
     }

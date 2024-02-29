@@ -6,13 +6,13 @@ import {
 } from "react-query";
 import { baseUrl } from "../../app/config/api.ts";
 import $api from "@src/shared/api/axios.ts";
-import { Equipment } from "@src/entities/equipment/Equipments.ts";
+import Equipment from "@src/entities/equipment";
 import { AxiosError } from "axios";
 
 type UseCreateEquipmentMutationResult = UseMutationResult<
   Equipment[],
   AxiosError,
-  any,
+  _,
   MutationKey
 >;
 
@@ -20,7 +20,7 @@ export const useCreateEquipment = (): UseCreateEquipmentMutationResult => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (equipment) => {
+    (equipment: Equipment) => {
       return $api
         .post(`${baseUrl}/equipment`, JSON.stringify(equipment), {
           method: "post",
