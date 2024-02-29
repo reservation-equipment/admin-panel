@@ -6,6 +6,6 @@ export type EquipmentCardModel = {
   actions: {
     edit: (id: number) => void;
     delete: (id: number) => void;
-    confirmDelete: (cbDeleteCard: () => void) => void;
+    confirmDelete: (cbDeleteCard: (id: number) => void) => void;
   };
 };

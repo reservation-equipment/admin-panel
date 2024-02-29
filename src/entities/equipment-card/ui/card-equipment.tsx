@@ -71,7 +71,10 @@ const CardEquipment = memo(
           <Button size="small" onClick={() => openPopupUpdate(id)}>
             Редактировать
           </Button>
-          <Button size="small" onClick={() => openModalConfirm(handleDelete)}>
+          <Button
+            size="small"
+            onClick={() => openModalConfirm(() => handleDelete(id))}
+          >
             Удалить
           </Button>
         </CardActions>

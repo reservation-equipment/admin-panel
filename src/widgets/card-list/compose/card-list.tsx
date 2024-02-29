@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from "react";
-import Equipment from "@src/entities/equipment";
 import CardListLayout from "@src/widgets/card-list/ui/card-list-layout.tsx";
 import CardEquipment from "@src/entities/equipment-card";
 import { useMutation, useQueryClient } from "react-query";
@@ -10,6 +9,7 @@ import {
   useModal,
 } from "@src/shared/hooks/useModal.tsx";
 import { AlertTypes, useAlert } from "@src/shared/hooks/useAlert.tsx";
+import { Equipment } from "@src/entities/equipment";
 
 export const CardList = ({ data }: { data: Equipment[] }) => {
   const queryClient = useQueryClient();
@@ -53,8 +53,6 @@ export const CardList = ({ data }: { data: Equipment[] }) => {
       setOpen(true);
       setTypeModal(ModalTypes.CONFIRM_MODAL);
       setProps({
-        id: undefined,
-        setAlert: undefined,
         msg: "Вы уверен, что хотите удалить оборудование?",
         actionFunc: cbDeleteCard,
       });
@@ -62,8 +60,8 @@ export const CardList = ({ data }: { data: Equipment[] }) => {
     [setProps, setOpen, setTypeModal]
   );
 
-  const handleDelete = () => {
-    deletePost.mutate(data.id);
+  const handleDelete = (id: number) => {
+    deletePost.mutate(id);
   };
 
   const renderCards = useMemo(() => {

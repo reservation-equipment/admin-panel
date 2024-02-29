@@ -7,8 +7,8 @@ import { Alert } from "@src/entities/alert";
 
 export interface PropsModal {
   msg?: string;
-  id: number | null;
-  setAlert: Dispatch<SetStateAction<Alert>>;
+  id?: number | null;
+  setAlert?: Dispatch<SetStateAction<Alert>>;
   actionFunc?: () => void;
 }
 
@@ -42,13 +42,19 @@ export const useModal = (): ModalOutput => {
       case ModalTypes.UPDATE_EQUIPMENT:
         return (
           <UpdateCard
-            id={props.id}
-            setAlert={props.setAlert}
+            id={props.id as number}
+            setAlert={props.setAlert as Dispatch<SetStateAction<Alert>>}
             close={handleClose}
           />
         );
       case ModalTypes.UPDATE_AREA:
-        return <UpdateArea {...props} close={handleClose} />;
+        return (
+          <UpdateArea
+            setAlert={props.setAlert as Dispatch<SetStateAction<Alert>>}
+            id={props.id as number}
+            close={handleClose}
+          />
+        );
       case ModalTypes.CONFIRM_MODAL:
         return (
           <ModalConfirm

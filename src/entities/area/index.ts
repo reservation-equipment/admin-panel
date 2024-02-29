@@ -1,1 +1,1 @@
-export type { default } from "./area.ts";
+export type { Area } from "./area.ts";

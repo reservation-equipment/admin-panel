@@ -1,1 +1,1 @@
-export type { default } from "./equipments.ts";
+export type { Equipment } from "./equipments.ts";
