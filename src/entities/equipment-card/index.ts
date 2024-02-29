@@ -1,0 +1,1 @@
+export {default} from "@src/entities/equipment-card/ui/card-equipment.tsx"

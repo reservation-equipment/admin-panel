@@ -1,0 +1,1 @@
+export {CardList} from "@src/widgets/card-list/compose/card-list.tsx"

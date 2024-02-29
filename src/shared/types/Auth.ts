@@ -1,18 +1,18 @@
-import {IUser} from "./User.ts";
+import { IUser } from "../../entities/user/user.ts";
 
 export interface AuthResponse {
-    accessToken: string
-    refreshToken: string
-    user: IUser
+  accessToken: string;
+  refreshToken: string;
+  user: IUser;
 }
 
 export interface LogOutResponse {
-    refresh_token: string,
-    id: number,
-    user_id: number
+  refresh_token: string;
+  id: number;
+  user_id: number;
 }
 
 export interface LogInRequest {
-    email: string,
-    password: string
+  email: string;
+  password: string;
 }

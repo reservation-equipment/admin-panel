@@ -1,10 +1,21 @@
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 
-const ModalConfirm = (props: any) => {
-    const {msg, actionFunc, handleClose} = props;
+type ModalConfirm = {
+  actionFunc: () => void;
+  handleClose: () => void;
+  msg: string;
+};
+
+const ModalConfirm = ({
+                          msg,
+                          actionFunc,
+                          handleClose
+                      }: ModalConfirm) => {
 
     const handleCancel = () => {
-        actionFunc()
+        if(actionFunc) {
+            actionFunc()
+        }
         handleClose()
     }
     return (
