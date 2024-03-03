@@ -6,13 +6,13 @@ import {
 } from "react-query";
 import { baseUrl } from "../../app/config/api.ts";
 import $api from "@src/shared/api/axios.ts";
-import Equipment from "@src/entities/equipment";
 import { AxiosError } from "axios";
+import { Equipment } from "@src/entities/equipment";
 
 type UseCreateEquipmentMutationResult = UseMutationResult<
   Equipment[],
   AxiosError,
-  _,
+  Equipment,
   MutationKey
 >;
 

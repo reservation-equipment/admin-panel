@@ -5,13 +5,13 @@ import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useMemo } from "react";
 import { InstitutesModel } from "@src/entities/department/department.ts";
 import { useInstitutes } from "@src/shared/hooks/useInstitutes.ts";
-import { Area } from "@src/entities/area/area.ts";
+import { Area } from "@src/entities/area";
 
 const CreateArea = () => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useInstitutes();
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<Area>();
 
   const mutation = useMutation(
     (area: Area) => {

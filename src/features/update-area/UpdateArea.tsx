@@ -3,8 +3,9 @@ import { baseUrl } from "@src/app/config/api.ts";
 import { useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { Button, TextField } from "@mui/material";
-import { Alert, AlertTypes } from "@src/shared/hooks/useAlert.tsx";
-import Area from "@src/entities/area";
+import { AlertTypes } from "@src/shared/hooks/useAlert.tsx";
+import { Area } from "@src/entities/area";
+import { Alert } from "@src/entities/alert";
 
 type UpdateAreaProps = {
   id: number | null;
