@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
-import { fetchAllInfoDepartment } from "@src/shared/api/Departments.ts";
 import {
   DepartmentInfo,
+  fetchAllInfoDepartment,
   fetchAllInfoDepartmentT,
-} from "../../entities/department/department.ts";
+} from "@src/entities/department";
 
 export const useDepartmentInfo = (filter: fetchAllInfoDepartmentT) => {
   return useQuery<DepartmentInfo[], Error>({

@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getAllEquipments } from "@src/widgets/card-list/model/api/equipment.ts";
-import { Equipment } from "@src/entities/equipment/Equipments.ts";
+import { Equipment } from "@src/entities/equipment";
 
 type FilterEquipments = {
   debouncedValue: string;

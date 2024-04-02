@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
-import { getAllAreas } from "@src/shared/api/Areas.ts";
-import { Area } from "../../entities/area/Area.ts";
+import { Area, getAllAreas } from "@src/entities/area";
 
 export const useGetAreas = () => {
   return useQuery<Area[], Error>({

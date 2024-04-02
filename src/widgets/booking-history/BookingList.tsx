@@ -38,22 +38,12 @@ const columns: GridColDef[] = [
     editable: false,
   },
   {
-    field: "date_from",
-    headerName: "Дата начала брони",
+    field: "date",
+    headerName: "Дата бронирования",
     sortable: false,
     width: 160,
     type: "dateTime",
-    valueGetter: (params: GridValueGetterParams) =>
-      new Date(params.row.date_from),
-  },
-  {
-    field: "date_to",
-    headerName: "Дата конца брони",
-    sortable: false,
-    width: 160,
-    type: "dateTime",
-    valueGetter: (params: GridValueGetterParams) =>
-      new Date(params.row.date_to),
+    valueGetter: (params: GridValueGetterParams) => new Date(params.row.date),
   },
   {
     field: "status",
@@ -73,14 +63,12 @@ const BookingList = ({ data }: BookingList) => {
         const {
           equipments: { status, name },
           users: { first_name, second_name },
-          date_from,
-          date_to,
+          date,
           id,
         } = item;
         return {
           status,
-          date_from,
-          date_to,
+          date,
           id,
           first_name,
           second_name,

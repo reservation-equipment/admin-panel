@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, useReducer } from "react";
-import { IUser, UserRoles } from "../../entities/user/user.ts";
+import { IUser, UserRoles } from "@src/entities/user";
 
 const defaultAuthInit = {
   user: null,
